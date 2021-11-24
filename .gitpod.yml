@@ -28,7 +28,7 @@ tasks:
       
       
     command: |
-      export PATH=/workspace/Gitpod_test:$PATH
+      export PATH=/workspace/Goatee:$PATH
       sudo apt install  -y tree
       sudo apt install  -y graphviz
       nextflow info
