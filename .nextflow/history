@@ -6,3 +6,5 @@
 2021-11-24 21:42:41	-	reverent_edison	-	cf7ea76ba0ced4c3fb908244caafc7b9	b182dca7-8e3f-4f9c-a70f-48a86abc5382	nextflow run main.nf
 2021-11-24 21:51:15	23.2s	hopeful_mestorf	ERR	cf7ea76ba0ced4c3fb908244caafc7b9	72e6f8cf-b68a-401f-b007-273be6064365	nextflow run main.nf
 2021-11-24 21:55:23	52.1s	determined_darwin	ERR	cf7ea76ba0ced4c3fb908244caafc7b9	6b4c116c-8105-4545-8a55-3bd6b75786ec	nextflow run main.nf
+2021-11-24 22:31:11	9m 50s	condescending_pasteur	ERR	cf7ea76ba0ced4c3fb908244caafc7b9	f1f27dc9-1a98-4032-a5ab-7cd50bf715ab	nextflow run main.nf -bg
+2021-11-24 22:43:01	-	suspicious_morse	-	cf7ea76ba0ced4c3fb908244caafc7b9	31bc4465-00b9-4fdf-ba86-a5a6b8222342	nextflow run main.nf -bg
