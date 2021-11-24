@@ -1,0 +1,9 @@
+2021-11-24 20:39:15	-	small_shannon	-	0d2c15662a4b78b5a816168cd69f6cfd	5d0a804e-178e-4076-bd82-ff9922cc11a1	nextflow run main.nf
+2021-11-24 20:39:31	1.1s	big_nightingale	OK	50328c8201e138feaf2b958c92450208	d6cc9dc6-80e9-4b8a-adc2-1552e0ab7f31	nextflow run main.nf
+2021-11-24 20:40:07	1.1s	naughty_perlman	OK	f2254fea95232d4113b0dd0cd2cad950	ad363528-81dd-43f5-8a5c-3c9a70f49d18	nextflow run main.nf
+2021-11-24 20:43:46	1.6s	admiring_gutenberg	OK	2de70ad7367813943cea507f26c7c332	1417bcc8-6314-4a26-901a-bf5d560832f3	nextflow run main.nf
+2021-11-24 20:45:00	1.1s	distraught_brahmagupta	OK	b6c08a03b6fe92541af72097298946c6	e1714259-e3c7-4b97-b2cf-99200c3aad22	nextflow run main.nf
+2021-11-24 20:45:19	1.7s	goofy_mercator	OK	f8066ba187b2d495a70d979615097ba4	04d6a148-b95a-4f6a-8ed4-c660f6723c1a	nextflow run main.nf
+2021-11-24 20:46:55	1.8s	wise_carson	OK	b6c08a03b6fe92541af72097298946c6	dfad6707-d4c6-4e5f-a599-21689f8e4f98	nextflow run main.nf
+2021-11-24 20:50:17	1.5s	grave_linnaeus	ERR	570ca114bc03beaf16c88c1901e0f985	bfbd2ab4-1e42-40e8-980c-ab4b9b72520f	nextflow run main.nf
+2021-11-24 20:51:09	4.5s	grave_marconi	ERR	570ca114bc03beaf16c88c1901e0f985	1a7067d4-1b85-49e2-96a9-fab4a34fd109	nextflow run main.nf

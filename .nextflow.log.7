@@ -1,0 +1,48 @@
+Nov-24 20:39:30.229 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf
+Nov-24 20:39:30.311 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 21.10.3
+Nov-24 20:39:30.339 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [big_nightingale] - revision: 50328c8201
+Nov-24 20:39:30.359 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /workspace/Goatee/nextflow.config
+Nov-24 20:39:30.360 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /workspace/Goatee/nextflow.config
+Nov-24 20:39:30.392 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Nov-24 20:39:31.055 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; plugins-dir=/home/gitpod/.nextflow/plugins
+Nov-24 20:39:31.057 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Nov-24 20:39:31.071 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Nov-24 20:39:31.072 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Nov-24 20:39:31.076 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.4.1 in 'deployment' mode
+Nov-24 20:39:31.088 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Nov-24 20:39:31.153 [main] DEBUG nextflow.Session - Session uuid: d6cc9dc6-80e9-4b8a-adc2-1552e0ab7f31
+Nov-24 20:39:31.153 [main] DEBUG nextflow.Session - Run name: big_nightingale
+Nov-24 20:39:31.154 [main] DEBUG nextflow.Session - Executor pool size: 6
+Nov-24 20:39:31.191 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 21.10.3 build 5655
+  Created: 23-11-2021 07:29 UTC 
+  System: Linux 5.4.0-1049-gke
+  Runtime: Groovy 3.0.9 on OpenJDK 64-Bit Server VM 11.0.13+8-LTS
+  Encoding: UTF-8 (UTF-8)
+  Process: 3637@ws-2515f35a-2cf8-4e33-b770-3512566c28fb [10.76.12.57]
+  CPUs: 6 - Mem: 12 GB (10.5 GB) - Swap: 0 (0)
+Nov-24 20:39:31.217 [main] DEBUG nextflow.Session - Work-dir: /workspace/Goatee/work [xfs]
+Nov-24 20:39:31.218 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /workspace/Goatee/bin
+Nov-24 20:39:31.229 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Nov-24 20:39:31.243 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Nov-24 20:39:31.287 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 7; maxThreads: 1000
+Nov-24 20:39:31.446 [main] DEBUG nextflow.Session - Session start invoked
+Nov-24 20:39:31.684 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Nov-24 20:39:31.709 [main] INFO  nextflow.Nextflow -  ===================================
+ input target sequence                : /workspace/Goatee/data/Human.fa
+ list of background species           : /workspace/Goatee/data/List_of_comparable_species.txt
+ out directory                        : results
+ 
+Nov-24 20:39:31.906 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 7; maxThreads: 1000
+Nov-24 20:39:31.964 [main] DEBUG nextflow.Session - Workflow process names [dsl2]: ORTHOFINDER
+Nov-24 20:39:31.964 [main] DEBUG nextflow.Session - Ignite dataflow network (1)
+Nov-24 20:39:31.971 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Nov-24 20:39:31.971 [main] DEBUG nextflow.Session - Session await
+Nov-24 20:39:31.971 [main] DEBUG nextflow.Session - Session await > all process finished
+Nov-24 20:39:31.971 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Nov-24 20:39:31.984 [main] INFO  nextflow.script.BaseScript - 
+Done! Open your report in your browser --> results/report.html (if you added -with-report flag)
+
+Nov-24 20:39:31.989 [main] DEBUG nextflow.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=0; failedCount=0; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=0ms; failedDuration=0ms; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=0; peakCpus=0; peakMemory=0; ]
+Nov-24 20:39:32.076 [main] DEBUG nextflow.CacheDB - Closing CacheDB done
+Nov-24 20:39:32.091 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

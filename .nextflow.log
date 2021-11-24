@@ -1,0 +1,89 @@
+Nov-24 20:51:09.015 [main] DEBUG nextflow.cli.Launcher - $> nextflow run main.nf
+Nov-24 20:51:09.090 [main] INFO  nextflow.cli.CmdRun - N E X T F L O W  ~  version 21.10.3
+Nov-24 20:51:09.115 [main] INFO  nextflow.cli.CmdRun - Launching `main.nf` [grave_marconi] - revision: 570ca114bc
+Nov-24 20:51:09.131 [main] DEBUG nextflow.config.ConfigBuilder - Found config local: /workspace/Goatee/nextflow.config
+Nov-24 20:51:09.131 [main] DEBUG nextflow.config.ConfigBuilder - Parsing config file: /workspace/Goatee/nextflow.config
+Nov-24 20:51:09.154 [main] DEBUG nextflow.config.ConfigBuilder - Applying config profile: `standard`
+Nov-24 20:51:09.766 [main] DEBUG nextflow.plugin.PluginsFacade - Setting up plugin manager > mode=prod; plugins-dir=/home/gitpod/.nextflow/plugins
+Nov-24 20:51:09.768 [main] DEBUG nextflow.plugin.PluginsFacade - Plugins default=[]
+Nov-24 20:51:09.778 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Enabled plugins: []
+Nov-24 20:51:09.779 [main] INFO  org.pf4j.DefaultPluginStatusProvider - Disabled plugins: []
+Nov-24 20:51:09.783 [main] INFO  org.pf4j.DefaultPluginManager - PF4J version 3.4.1 in 'deployment' mode
+Nov-24 20:51:09.793 [main] INFO  org.pf4j.AbstractPluginManager - No plugins
+Nov-24 20:51:09.852 [main] DEBUG nextflow.Session - Session uuid: 1a7067d4-1b85-49e2-96a9-fab4a34fd109
+Nov-24 20:51:09.852 [main] DEBUG nextflow.Session - Run name: grave_marconi
+Nov-24 20:51:09.852 [main] DEBUG nextflow.Session - Executor pool size: 6
+Nov-24 20:51:09.887 [main] DEBUG nextflow.cli.CmdRun - 
+  Version: 21.10.3 build 5655
+  Created: 23-11-2021 07:29 UTC 
+  System: Linux 5.4.0-1049-gke
+  Runtime: Groovy 3.0.9 on OpenJDK 64-Bit Server VM 11.0.13+8-LTS
+  Encoding: UTF-8 (UTF-8)
+  Process: 4914@ws-2515f35a-2cf8-4e33-b770-3512566c28fb [10.76.12.57]
+  CPUs: 6 - Mem: 12 GB (10.5 GB) - Swap: 0 (0)
+Nov-24 20:51:09.910 [main] DEBUG nextflow.Session - Work-dir: /workspace/Goatee/work [xfs]
+Nov-24 20:51:09.911 [main] DEBUG nextflow.Session - Script base path does not exist or is not a directory: /workspace/Goatee/bin
+Nov-24 20:51:09.921 [main] DEBUG nextflow.executor.ExecutorFactory - Extension executors providers=[]
+Nov-24 20:51:09.934 [main] DEBUG nextflow.Session - Observer factory: DefaultObserverFactory
+Nov-24 20:51:09.970 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 7; maxThreads: 1000
+Nov-24 20:51:10.100 [main] DEBUG nextflow.Session - Session start invoked
+Nov-24 20:51:10.388 [main] DEBUG nextflow.script.ScriptRunner - > Launching execution
+Nov-24 20:51:10.408 [main] INFO  nextflow.Nextflow -  ===================================
+ input target sequence                : /workspace/Goatee/data/Human.fasta.gz
+ list of background species           : /workspace/Goatee/data/List_of_comparable_species.txt
+ out directory                        : results
+ 
+Nov-24 20:51:10.623 [main] DEBUG nextflow.util.CustomThreadPool - Creating default thread pool > poolSize: 7; maxThreads: 1000
+Nov-24 20:51:10.756 [main] DEBUG nextflow.executor.ExecutorFactory - << taskConfig executor: null
+Nov-24 20:51:10.756 [main] DEBUG nextflow.executor.ExecutorFactory - >> processorType: 'local'
+Nov-24 20:51:10.761 [main] DEBUG nextflow.executor.Executor - [warm up] executor > local
+Nov-24 20:51:10.767 [main] DEBUG n.processor.LocalPollingMonitor - Creating local task monitor for executor 'local' > cpus=6; memory=12 GB; capacity=6; pollInterval=100ms; dumpInterval=5m
+Nov-24 20:51:10.841 [main] DEBUG nextflow.Session - Workflow process names [dsl2]: ORTHOFINDER
+Nov-24 20:51:10.842 [main] DEBUG nextflow.Session - Ignite dataflow network (3)
+Nov-24 20:51:10.850 [main] DEBUG nextflow.processor.TaskProcessor - Starting process > ORTHOFINDER
+Nov-24 20:51:10.852 [main] DEBUG nextflow.script.ScriptRunner - > Await termination 
+Nov-24 20:51:10.852 [main] DEBUG nextflow.Session - Session await
+Nov-24 20:51:11.020 [Task submitter] DEBUG nextflow.executor.LocalTaskHandler - Launch cmd line: /bin/bash -ue .command.run
+Nov-24 20:51:11.028 [Task submitter] INFO  nextflow.Session - [04/c2d968] Submitted process > ORTHOFINDER (1)
+Nov-24 20:51:13.242 [Task monitor] DEBUG n.processor.TaskPollingMonitor - Task completed > TaskHandler[id: 1; name: ORTHOFINDER (1); status: COMPLETED; exit: 1; error: -; workDir: /workspace/Goatee/work/04/c2d968f934a2190f38da8bd6a5b8a9]
+Nov-24 20:51:13.274 [Task monitor] ERROR nextflow.processor.TaskProcessor - Error executing process > 'ORTHOFINDER (1)'
+
+Caused by:
+  Process `ORTHOFINDER (1)` terminated with an error exit status (1)
+
+Command executed:
+
+  orthofinder -f [Cow.fasta.gz
+  , Mouse.fasta.gz
+  , Elephant.fasta.gz
+  , Pig.fasta.gz
+  ]
+
+Command exit status:
+  1
+
+Command output:
+  
+  OrthoFinder version 2.5.4 Copyright (C) 2014 David Emms
+  
+  Specified directory doesn't exist: [Cow.fasta.gz/
+  ERROR: An error occurred, ***please review the error messages*** they may contain useful information about the problem.
+
+Command wrapper:
+  
+  OrthoFinder version 2.5.4 Copyright (C) 2014 David Emms
+  
+  Specified directory doesn't exist: [Cow.fasta.gz/
+  ERROR: An error occurred, ***please review the error messages*** they may contain useful information about the problem.
+
+Work dir:
+  /workspace/Goatee/work/04/c2d968f934a2190f38da8bd6a5b8a9
+
+Tip: you can replicate the issue by changing to the process work dir and entering the command `bash .command.run`
+Nov-24 20:51:13.281 [main] DEBUG nextflow.Session - Session await > all process finished
+Nov-24 20:51:13.281 [Task monitor] DEBUG nextflow.Session - Session aborted -- Cause: Process `ORTHOFINDER (1)` terminated with an error exit status (1)
+Nov-24 20:51:13.298 [main] DEBUG nextflow.Session - Session await > all barriers passed
+Nov-24 20:51:13.303 [main] INFO  nextflow.script.BaseScript - Hmmm .. something went wrong
+Nov-24 20:51:13.311 [main] DEBUG nextflow.trace.WorkflowStatsObserver - Workflow completed > WorkflowStats[succeededCount=0; failedCount=1; ignoredCount=0; cachedCount=0; pendingCount=0; submittedCount=0; runningCount=0; retriesCount=0; abortedCount=0; succeedDuration=0ms; failedDuration=2.2s; cachedDuration=0ms;loadCpus=0; loadMemory=0; peakRunning=1; peakCpus=1; peakMemory=0; ]
+Nov-24 20:51:13.492 [main] DEBUG nextflow.CacheDB - Closing CacheDB done
+Nov-24 20:51:13.501 [main] DEBUG nextflow.script.ScriptRunner - > Execution complete -- Goodbye

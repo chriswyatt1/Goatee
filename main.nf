@@ -17,7 +17,7 @@ nextflow.enable.dsl = 2
  * Default pipeline parameters (on test data). They can be overriden on the command line eg.
  * given `params.genome` specify on the run command line `--genome /path/to/Duck_genome.fasta`.
  */
-params.target = "$baseDir/data/Human.fa"
+params.target = "$baseDir/data/Human.fasta.gz"
 params.background = "$baseDir/data/List_of_comparable_species.txt"
 params.outdir = "results"
 
@@ -36,17 +36,21 @@ log.info """\
 //================================================================================
 
 include { ORTHOFINDER } from './modules/goatee.nf'
-include { BUILD_GO_HASH } from './modules/goatee.nf'
-include { GO_ENRICHMENT } from './modules/goatee.nf' 
+//include { BUILD_GO_HASH } from './modules/goatee.nf'
+//include { GO_ENRICHMENT } from './modules/goatee.nf' 
 
 input_target = channel
 	.fromPath(params.target)
 	.ifEmpty { error "Cannot find any target protein fasta file  matching: ${params.target}" }
+    .view()
 
 input_background_list = channel
 	.fromPath(params.background)
 	.ifEmpty { error "Cannot find any background list of protein files: ${params.background}" }
-
+    .splitText()
+	.collect()
+	.view()
+	
 
 
 workflow {
