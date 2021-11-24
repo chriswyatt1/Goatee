@@ -4,8 +4,6 @@
  
 
  /*
- * Design Theraputics Pipeline in Nextflow
- *
  * Authors:
  * - Chris Wyatt <chris.wyatt@seqera.io>
  */
@@ -27,9 +25,6 @@ params.outdir = "results"
 //For CPU and Memory of each process: see conf/optimized_processes.config
 
 log.info """\
- D E S I G N  T H E R A P U T I C S 
- S P L I C I N G
- P I P E L I N E
  ===================================
  input target sequence                : ${params.target}
  list of background species           : ${params.background}
