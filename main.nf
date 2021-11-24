@@ -17,8 +17,8 @@ nextflow.enable.dsl = 2
  * Default pipeline parameters (on test data). They can be overriden on the command line eg.
  * given `params.genome` specify on the run command line `--genome /path/to/Duck_genome.fasta`.
  */
-params.target = "$baseDir/data/Human.fasta.gz"
-params.background = "$baseDir/data/List_of_comparable_species.txt"
+params.focal = "Human.fasta.gz"
+params.proteins = "$baseDir/data/"
 params.outdir = "results"
 
 
@@ -26,8 +26,8 @@ params.outdir = "results"
 
 log.info """\
  ===================================
- input target sequence                : ${params.target}
- list of background species           : ${params.background}
+ focal species                        : ${params.focal}
+ list of background species           : ${params.proteins}
  out directory                        : ${params.outdir}
  """
 
@@ -39,22 +39,17 @@ include { ORTHOFINDER } from './modules/goatee.nf'
 //include { BUILD_GO_HASH } from './modules/goatee.nf'
 //include { GO_ENRICHMENT } from './modules/goatee.nf' 
 
-input_target = channel
-	.fromPath(params.target)
-	.ifEmpty { error "Cannot find any target protein fasta file  matching: ${params.target}" }
-    .view()
+input_target_name = channel
+	.fromPath(params.focal)
+	.ifEmpty { error "Cannot find focal protein fasta file  matching: ${params.focal}" }
 
-input_background_list = channel
-	.fromPath(params.background)
-	.ifEmpty { error "Cannot find any background list of protein files: ${params.background}" }
-    .splitText()
-	.collect()
-	.view()
-	
+input_proteins = channel
+	.fromPath(params.proteins)
+	.ifEmpty { error "Cannot find the list of protein files: ${params.proteins}" }
 
 
 workflow {
-    ORTHOFINDER ( input_target, input_background_list)
+    ORTHOFINDER ( input_proteins )
     //BUILD_GO_HASH (ORTHOFINDER.out)
     //GO_ENRICHMENT (BUILD_GO_HASH.out, input_)
 }

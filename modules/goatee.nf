@@ -3,14 +3,20 @@ process ORTHOFINDER {
     label 'orthofinder'
 
     input:
-        path("Directory_target_fasta")
-        val("Directory_protein_fastas")
+        path("Directory_protein_fastas")
         
     output:
-        path("*.csv") , emit: orthologues
+        path("My_result/*.csv") , emit: orthologues
 
     script:
     """
-        orthofinder -f ${Directory_protein_fastas}
+        if [ -f ${Directory_protein_fastas}/*.gz ]; 
+        then 
+        gunzip ${Directory_protein_fastas}/*.gz;
+        else
+        print "No GZip files to unzip";
+        fi
+
+        orthofinder -f ${Directory_protein_fastas} -o My_result
     """
 }

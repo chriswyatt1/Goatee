@@ -1,0 +1,4 @@
+2021-11-24 21:33:26 : Started OrthoFinder version 2.5.4
+Command Line: orthofinder -f Directory_protein_fastas
+
+WorkingDirectory_Base: /workspace/Goatee/work/64/13a688e42f9a3e86b44215c1e617a3/Directory_protein_fastas/OrthoFinder/Results_Nov24/WorkingDirectory/
