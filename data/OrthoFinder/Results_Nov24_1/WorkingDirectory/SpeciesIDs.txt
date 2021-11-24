@@ -1,5 +1,0 @@
-0: Cow.fasta
-1: Elephant.fasta
-2: Human.fasta
-3: Mouse.fasta
-4: Pig.fasta
