@@ -1,3 +1,5 @@
-FROM gitpod/workspace-full
+FROM r-base
 
-RUN brew install R
+COPY . /usr/local/src/myscripts
+WORKDIR /usr/local/src/myscripts
+CMD ["Rscript", "myscript.R"]
