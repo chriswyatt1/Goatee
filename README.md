@@ -7,8 +7,9 @@ This pipeline aims to create a simple procedure to build a Gene ontology databas
 
 To run nextflow:
 
+```
 nextflow run main.nf -bg
-
+```
 
 To test orthofinder options use:
 ```
@@ -19,3 +20,5 @@ To get a subset for testing this repo:
 ```
 awk '/^>/ {printf("%s%s\t",(N>0?"\n":""),$0);N++;next;} {printf("%s",$0);} END {printf("\n");}' Pig.fasta | awk -F '\t' '{if(index($1,"Olfactory")!=0) printf("%s\n%s\n",$1,$2);}' | gzip > Pig_olfactory.fasta.gz
 ```
+
+These lines are helpful to explore biomaRt :
