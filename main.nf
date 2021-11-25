@@ -17,8 +17,8 @@ nextflow.enable.dsl = 2
  * Default pipeline parameters (on test data). They can be overriden on the command line eg.
  * given `params.genome` specify on the run command line `--genome /path/to/Duck_genome.fasta`.
  */
-params.focal = "Human.fasta.gz"
-params.proteins = "$baseDir/data/"
+params.focal = "Human_olfactory.fasta.gz"
+params.proteins = "$baseDir/olfactory_data/"
 params.outdir = "results"
 
 

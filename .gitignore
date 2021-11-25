@@ -6,3 +6,4 @@ nextflow
 !.gitignore
 .nextflow.pid
 /.nextflow/history
+results

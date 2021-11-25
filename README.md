@@ -7,7 +7,7 @@ This pipeline aims to create a simple procedure to build a Gene ontology databas
 
 To run nextflow:
 
-nextflow run main.nf 
+nextflow run main.nf -bg
 
 
 To test orthofinder options use:
