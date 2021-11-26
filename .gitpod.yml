@@ -27,6 +27,7 @@ tasks:
       sudo apt install -y r-base
       sudo apt install -y build-essential
       mkdir lib
+      chmod a+rwx lib
       Rscript bin/install_biomart.R
 
     command: |
