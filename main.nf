@@ -35,7 +35,7 @@ log.info """\
 // Include modules
 //================================================================================
 
-include { ORTHOFINDER } from './modules/goatee.nf'
+include { ORTHOFINDER } from './modules/orthofinder.nf'
 //include { BUILD_GO_HASH } from './modules/goatee.nf'
 //include { GO_ENRICHMENT } from './modules/goatee.nf' 
 
