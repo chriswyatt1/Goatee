@@ -26,7 +26,7 @@ tasks:
       sudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu focal-cran40/'
       sudo apt install -y r-base
       sudo apt install -y build-essential
-      # BiocManager::install("biomaRt")
+      Rscript lib/install_biomart.R
 
     command: |
       export PATH=/workspace/Goatee:$PATH
