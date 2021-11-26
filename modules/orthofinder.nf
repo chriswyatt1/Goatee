@@ -5,7 +5,8 @@ process ORTHOFINDER {
     
     input:
         path("Directory_protein_fastas")
-        
+        path("Input_target_fasta") 
+               
     output:
         path("My_result/*/Orthogroups/Orthogroups.tsv") , emit: orthologues
 

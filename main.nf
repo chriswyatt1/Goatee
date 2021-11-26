@@ -17,8 +17,11 @@ nextflow.enable.dsl = 2
  * Default pipeline parameters (on test data). They can be overriden on the command line eg.
  * given `params.genome` specify on the run command line `--genome /path/to/Duck_genome.fasta`.
  */
+
+params.ensembl_repo="metazoa_mart"
+params.ensembl_host="https://metazoa.ensembl.org"
+params.ensembl_dataset="example.txt"
 params.focal = "Human_olfactory.fasta.gz"
-params.proteins = "$baseDir/olfactory_data/"
 params.outdir = "results"
 
 
@@ -27,7 +30,7 @@ params.outdir = "results"
 log.info """\
  ===================================
  focal species                        : ${params.focal}
- list of background species           : ${params.proteins}
+ list of background species           : ${params.ensembl_dataset}
  out directory                        : ${params.outdir}
  """
 
@@ -35,21 +38,32 @@ log.info """\
 // Include modules
 //================================================================================
 
+include { GET_DATA } from './modules/getdata.nf'
 include { ORTHOFINDER } from './modules/orthofinder.nf'
 //include { BUILD_GO_HASH } from './modules/goatee.nf'
 //include { GO_ENRICHMENT } from './modules/goatee.nf' 
 
-input_target_name = channel
+input_target_proteins = channel
 	.fromPath(params.focal)
-	.ifEmpty { error "Cannot find focal protein fasta file  matching: ${params.focal}" }
+	.ifEmpty { error "Cannot find the list of protein files: ${params.focal}" }
 
-input_proteins = channel
-	.fromPath(params.proteins)
-	.ifEmpty { error "Cannot find the list of protein files: ${params.proteins}" }
+background_species = channel
+	.fromPath(params.ensembl_dataset) 
+	.splitText()    
+	.ifEmpty { error "Cannot find the list of protein files: ${params.ensembl_dataset}" }
+
+input_host = channel
+	.value(params.ensembl_host)
+	.ifEmpty { error "Cannot find the list of protein files: ${params.ensembl_host}" }
+
+input_repo = channel
+	.value(params.ensembl_repo)
+	.ifEmpty { error "Cannot find the list of protein files: ${params.ensembl_repo}" }
 
 
 workflow {
-    ORTHOFINDER ( input_proteins )
+	GET_DATA ( input_repo, input_host, background_species )
+    ORTHOFINDER ( GET_DATA.out.fasta_files , input_target_proteins )
     //BUILD_GO_HASH (ORTHOFINDER.out)
     //GO_ENRICHMENT (BUILD_GO_HASH.out, input_)
 }
