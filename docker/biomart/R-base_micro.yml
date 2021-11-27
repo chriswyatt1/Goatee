@@ -1,0 +1,12 @@
+name:
+  biomart
+
+channels:
+  - bioconda
+  - conda-forge
+
+dependencies:
+  - "r-base=4.1.0"
+  - "r-devtools=2.4.2"
+  - "python=3.7"
+  - wget
