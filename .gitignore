@@ -1,0 +1,10 @@
+/work
+nextflow
+/.nextflow
+**/.nextflow.log*
+**/history
+!.gitignore
+.nextflow.pid
+/.nextflow/history
+results
+lib

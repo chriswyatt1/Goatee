@@ -17,8 +17,11 @@ nextflow.enable.dsl = 2
  * Default pipeline parameters (on test data). They can be overriden on the command line eg.
  * given `params.genome` specify on the run command line `--genome /path/to/Duck_genome.fasta`.
  */
-params.target = "$baseDir/data/Human.fa"
-params.background = "$baseDir/data/List_of_comparable_species.txt"
+
+params.ensembl_repo="metazoa_mart"
+params.ensembl_host="https://metazoa.ensembl.org"
+params.ensembl_dataset="example.txt"
+params.focal = "Human_olfactory.fasta.gz"
 params.outdir = "results"
 
 
@@ -26,8 +29,8 @@ params.outdir = "results"
 
 log.info """\
  ===================================
- input target sequence                : ${params.target}
- list of background species           : ${params.background}
+ focal species                        : ${params.focal}
+ list of background species           : ${params.ensembl_dataset}
  out directory                        : ${params.outdir}
  """
 
@@ -35,22 +38,32 @@ log.info """\
 // Include modules
 //================================================================================
 
-include { ORTHOFINDER } from './modules/goatee.nf'
-include { BUILD_GO_HASH } from './modules/goatee.nf'
-include { GO_ENRICHMENT } from './modules/goatee.nf' 
+include { GET_DATA } from './modules/getdata.nf'
+include { ORTHOFINDER } from './modules/orthofinder.nf'
+//include { BUILD_GO_HASH } from './modules/goatee.nf'
+//include { GO_ENRICHMENT } from './modules/goatee.nf' 
 
-input_target = channel
-	.fromPath(params.target)
-	.ifEmpty { error "Cannot find any target protein fasta file  matching: ${params.target}" }
+input_target_proteins = channel
+	.fromPath(params.focal)
+	.ifEmpty { error "Cannot find the list of protein files: ${params.focal}" }
 
-input_background_list = channel
-	.fromPath(params.background)
-	.ifEmpty { error "Cannot find any background list of protein files: ${params.background}" }
+background_species = channel
+	.fromPath(params.ensembl_dataset) 
+	.splitText()    
+	.ifEmpty { error "Cannot find the list of protein files: ${params.ensembl_dataset}" }
 
+input_host = channel
+	.value(params.ensembl_host)
+	.ifEmpty { error "Cannot find the list of protein files: ${params.ensembl_host}" }
+
+input_repo = channel
+	.value(params.ensembl_repo)
+	.ifEmpty { error "Cannot find the list of protein files: ${params.ensembl_repo}" }
 
 
 workflow {
-    ORTHOFINDER ( input_target, input_background_list)
+	GET_DATA ( input_repo, input_host, background_species )
+    ORTHOFINDER ( GET_DATA.out.fasta_files , input_target_proteins )
     //BUILD_GO_HASH (ORTHOFINDER.out)
     //GO_ENRICHMENT (BUILD_GO_HASH.out, input_)
 }
