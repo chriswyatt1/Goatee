@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript 
 args = commandArgs(trailingOnly=TRUE)
+ensembl_entry <- useEnsembl(biomart = "args[1]", dataset="args[3]", mirror="uswest" , host="args[2]")
 library(biomaRt)
-ensembl_entry <- useEnsembl(biomart = "args[0]", dataset="args[2]", mirror="uswest" , host="args[1]")
 get_go_ids <- getBM(attributes = c('ensembl_gene_id','go_id'), mart = ensembl_entry)
 write.table(get_go_ids, "go_hash.txt", row.names=T, quote=F, sep="\t" )
 

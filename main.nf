@@ -49,7 +49,7 @@ input_target_proteins = channel
 
 background_species = channel
 	.fromPath(params.ensembl_dataset) 
-	.splitText()    
+	.splitText().map{it -> it.trim()}    
 	.ifEmpty { error "Cannot find the list of protein files: ${params.ensembl_dataset}" }
 
 input_host = channel
