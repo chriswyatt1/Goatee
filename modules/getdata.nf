@@ -1,3 +1,5 @@
+nextflow.enable.dsl = 2
+
 process GET_DATA {
     label 'get_data_biomaRt'
     
@@ -13,7 +15,7 @@ process GET_DATA {
     script:
     """
         #Pull all Biomart records for species.
-        Rscript --vanilla bin/R_biomart.R $ensembl_repo $ensembl_host $public_species
+        R_biomart.R $ensembl_repo $ensembl_host $public_species
         #Tidy up records
         #INsert custom perl/unix script.
         cat Myoutput* > All_fasta

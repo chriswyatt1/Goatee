@@ -1,3 +1,4 @@
 amellifera_eg_gene
-camels
-ducks
+bimpatiens_eg_gene
+dmelanogaster_eg_gene
+celegans_eg_gene

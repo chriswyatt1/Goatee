@@ -3,9 +3,9 @@ args = commandArgs(trailingOnly=TRUE)
 library(biomaRt)
 ensembl_entry <- useEnsembl(biomart = "args[0]", dataset="args[2]", mirror="uswest" , host="args[1]")
 get_go_ids <- getBM(attributes = c('ensembl_gene_id','go_id'), mart = ensembl_entry)
-write.table(bazooka, "go_hash.txt", row.names=T, quote=F, sep="\t" )
+write.table(get_go_ids, "go_hash.txt", row.names=T, quote=F, sep="\t" )
 
-d<-unique(bazooka\$ensembl_gene_id)
+d<-unique(get_go_ids\$ensembl_gene_id)
 new_ids<- split(d, ceiling(seq_along(d)/500))
 
 for(i in 1:length(new_ids)) {

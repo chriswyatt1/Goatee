@@ -1,6 +1,8 @@
+nextflow.enable.dsl = 2
+
 process ORTHOFINDER {
-    publishDir "$params.outdir/Orthofinder/"
     label 'orthofinder'
+    publishDir "$params.outdir/Orthofinder/"
     stageInMode 'copy'
     
     input:

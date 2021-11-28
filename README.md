@@ -14,6 +14,7 @@ nextflow run main.nf -bg
 To test orthofinder options use:
 ```
 docker run -it --rm davidemms/orthofinder:2.5.4 orthofinder -h
+docker run -it --rm chriswyatt/goatee_biomart R
 ```
 
 To get a subset for testing this repo:
