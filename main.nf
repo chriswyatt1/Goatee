@@ -21,7 +21,7 @@ nextflow.enable.dsl = 2
 params.ensembl_repo="metazoa_mart"
 params.ensembl_host="https://metazoa.ensembl.org"
 params.ensembl_dataset="example.txt"
-params.focal = "Human_olfactory.fasta.gz"
+params.focal = "Branchiostoma_lanceolatum.BraLan2.pep.all.fa.gz"
 params.outdir = "results"
 
 
@@ -63,7 +63,8 @@ input_repo = channel
 
 workflow {
 	GET_DATA ( input_repo, input_host, background_species )
-    ORTHOFINDER ( GET_DATA.out.fasta_files , input_target_proteins )
+	GET_DATA.out.fasta_files.mix(input_target_proteins).collect().view().set{ proteins_ch }
+    ORTHOFINDER ( proteins_ch )
     //BUILD_GO_HASH (ORTHOFINDER.out)
     //GO_ENRICHMENT (BUILD_GO_HASH.out, input_)
 }

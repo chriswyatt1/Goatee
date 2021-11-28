@@ -9,7 +9,7 @@ process GET_DATA {
         val(public_species)
         
     output:
-        path("${public_species}.fasta") , emit: fasta_files
+        tuple val(${public_species}), path("${public_species}.fasta") , emit: fasta_files
         path("${public_species}.go.txt") , emit: gene_ontology_files
 
     script:

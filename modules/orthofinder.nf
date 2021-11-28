@@ -3,22 +3,22 @@ nextflow.enable.dsl = 2
 process ORTHOFINDER {
     label 'orthofinder'
     publishDir "$params.outdir/Orthofinder/"
-    stageInMode 'copy'
+    //stageInMode 'copy'
     
     input:
-        path("Directory_protein_fastas")
-        path("Input_target_fasta") 
+        tuple val("Sample_name"), path("protein_fastas")
                
     output:
         path("My_result/*/Orthogroups/Orthogroups.tsv") , emit: orthologues
 
     script:
     """
-        if ls ${Directory_protein_fastas}/*.gz 1> /dev/null 2>&1; then
-        gunzip ${Directory_protein_fastas}/*.gz;
+        
+        if ls ${protein_fastas}/*.gz 1> /dev/null 2>&1; then
+        gunzip ${protein_fastas}/*.gz;
         else
         echo "No files to gunzip, proceed."
         fi
-        orthofinder -f ${Directory_protein_fastas} -o My_result
+        # orthofinder -f . -o My_result
     """
 }
