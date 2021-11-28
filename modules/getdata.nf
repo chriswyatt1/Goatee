@@ -21,7 +21,7 @@ process GET_DATA {
         cat Myoutput* > All_fasta
         sed '/ensembl_gene_id/d' All_fasta > All_fasta2
         sed '/peptide/d' All_fasta2 > All_fasta3
-        Fix_fastq.pl All_fasta3 > ${public_species}\.fasta
+        Fix_fasta.pl All_fasta3 > ${public_species}\.fasta
         mv go_hash.txt ${public_species}.go.txt
     """
 }

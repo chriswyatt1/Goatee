@@ -23,3 +23,13 @@ awk '/^>/ {printf("%s%s\t",(N>0?"\n":""),$0);N++;next;} {printf("%s",$0);} END {
 ```
 
 These lines are helpful to explore biomaRt :
+
+
+To check what species are present and their species name codes:
+
+```
+library(biomaRt)
+ensembl <- useEnsembl(biomart = "metazoa_mart", host="https://metazoa.ensembl.org")
+datasets <- listDatasets(ensembl)
+datasets
+```
