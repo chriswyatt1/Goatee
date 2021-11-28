@@ -15,7 +15,7 @@ process GET_DATA {
     script:
     """
         #Pull all Biomart records for species.
-        R_biomart.R $ensembl_repo $ensembl_host $public_species
+        R_biomart.R '$ensembl_repo' '$ensembl_host' '$public_species'
         #Tidy up records
         #INsert custom perl/unix script.
         cat Myoutput* > All_fasta
