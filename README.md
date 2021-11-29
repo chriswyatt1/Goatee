@@ -33,3 +33,5 @@ ensembl <- useEnsembl(biomart = "metazoa_mart", host="https://metazoa.ensembl.or
 datasets <- listDatasets(ensembl)
 datasets
 ```
+
+Useful yml for future projects: https://github.com/nf-core/circrna/blob/e36d85792a9f9c2fc317ead0131560fddbae9462/environment.yml
