@@ -13,12 +13,7 @@ process ORTHOFINDER {
 
     script:
     """
-        
-        if ls ${protein_fastas}/*.gz 1> /dev/null 2>&1; then
-        gunzip ${protein_fastas}/*.gz;
-        else
-        echo "No files to gunzip, proceed."
-        fi
-        # orthofinder -f . -o My_result
+        gunzip *.gz
+        orthofinder -f . -o My_result
     """
 }
