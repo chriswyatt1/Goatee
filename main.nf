@@ -19,7 +19,7 @@ nextflow.enable.dsl = 2
  */
 
 params.ensembl_repo="metazoa_mart"
-params.ensembl_host="https://metazoa.ensembl.org"
+params.ensembl_host='https://metazoa.ensembl.org'
 params.ensembl_dataset="example.txt"
 params.focal = "Branchiostoma_lanceolatum.BraLan2.pep.all.fa.gz"
 params.predownloaded_fasta= "./Background_species_folder/*"
