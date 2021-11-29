@@ -1,12 +1,10 @@
-nextflow.enable.dsl = 2
-
 process ORTHOFINDER {
     label 'orthofinder'
     publishDir "$params.outdir/Orthofinder/"
-    //stageInMode 'copy'
+    stageInMode 'copy'
     
     input:
-        '*'
+        path '*'
                
     output:
         path("My_result/*/Orthogroups/Orthogroups.tsv") , emit: orthologues

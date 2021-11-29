@@ -1,5 +1,3 @@
-nextflow.enable.dsl = 2
-
 process GET_DATA {
     label 'get_data_biomaRt'
     
