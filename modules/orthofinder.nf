@@ -6,7 +6,7 @@ process ORTHOFINDER {
     //stageInMode 'copy'
     
     input:
-        tuple val("Sample_name"), path("protein_fastas")
+        '*'
                
     output:
         path("My_result/*/Orthogroups/Orthogroups.tsv") , emit: orthologues
