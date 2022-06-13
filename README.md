@@ -33,3 +33,17 @@ ensembl <- useEnsembl(biomart = "metazoa_mart", host="https://metazoa.ensembl.or
 datasets <- listDatasets(ensembl)
 datasets
 ```
+
+For mammals:
+```
+ensembl <- useEnsembl(biomart = "genes", host="https://ensembl.org")
+```
+
+Useful yml for future projects: https://github.com/nf-core/circrna/blob/e36d85792a9f9c2fc317ead0131560fddbae9462/environment.yml
+
+
+Common errors:
+```
+Timeout was reached: [www.ensembl.org:80] Operation timed out after 300000 milliseconds with 11844514 bytes received
+```
+This error is due to biomaRt timing out. A way to counter this is to try the script again (with -resume), and to reduce the number of gene pulls in each loop (at line 9 of bin/R_biomart.R). From the default 200 to 100 or 50.

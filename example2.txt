@@ -1,0 +1,5 @@
+btaurus_gene_ensembl
+lafricana_gene_ensembl
+hsapiens_gene_ensembl
+mmusculus_gene_ensembl
+sscrofa_gene_ensembl
