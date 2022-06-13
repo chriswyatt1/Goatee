@@ -87,7 +87,7 @@ workflow {
 		channel.fromPath(params.predownloaded_gofiles).collect().set{ go_file_ch }
 	}
     ORTHOFINDER ( proteins_ch )
-    //GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, input_target_proteins_2)
+    GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, input_target_proteins_2)
     //GO_ENRICHMENT (BUILD_GO_HASH.out, input_)
 }
 
