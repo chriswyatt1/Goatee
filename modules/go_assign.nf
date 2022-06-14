@@ -1,10 +1,10 @@
 process GO_ASSIGN {
     label 'go_assignment'
     publishDir "$params.outdir/Go/"
-    stageInMode 'copy'
+    //stageInMode 'copy'
     
     input:
-        path '*.go.txt'
+        path "*.go.txt"
         path 'Orthogroups.tsv'
         path 'Focal_fasta'
 

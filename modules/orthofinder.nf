@@ -1,7 +1,7 @@
 process ORTHOFINDER {
     label 'orthofinder'
     publishDir "$params.outdir/Orthofinder/"
-    stageInMode 'copy'
+    //stageInMode 'copy'
     
     input:
         path '*'
