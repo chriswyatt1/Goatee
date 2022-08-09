@@ -11,6 +11,13 @@ To run nextflow:
 nextflow run main.nf -bg
 ```
 
+To test on an example (full) dataset using insect downloads:
+
+```
+nextflow run main.nf -profile myriad --ensembl_dataset example_insects.txt --download true -bg --focal My_polybia_prots 
+```
+
+
 To test orthofinder options use:
 ```
 docker run -it --rm davidemms/orthofinder:2.5.4 orthofinder -h
