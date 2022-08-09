@@ -1,0 +1,8 @@
+aggca014905175v1_eg_gene
+apisum_eg_gene
+bimpatiens_eg_gene
+dmelanogaster_eg_gene
+nvitripennis_eg_gene
+oagca000612105v2_eg_gene
+sinvicta_eg_gene
+acephalotes_eg_gene
