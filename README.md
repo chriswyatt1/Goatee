@@ -2,23 +2,42 @@ This is a Nextflow pipeline to run non-model organism Gene Ontology
 
 When working with Human and Mouse, there are plentiful resources to take advantage of. Yet, for non-model organisms, it can take a long time to build the resources needed to analyse a new species. 
 
-This pipeline aims to create a simple procedure to build a Gene ontology database for a new species. Then you can use it to produce blast hits with a few different programs to compare and contrast them.
+This pipeline aims to create a simple procedure to build a Gene ontology database for a new species. Then you can use it to produce GO enrichment hits with a few different programs to compare and contrast them.
 
 
-To run nextflow:
+1. Running on mammalian data (default settings):
 
 ```
 nextflow run main.nf -bg
 ```
 
-To test on an example (full) dataset using insect downloads:
+Default settings:
+params.ensembl_repo="genes"
+params.ensembl_host='https://ensembl.org'
+params.ensembl_dataset="example.txt"
+params.focal = "Branchiostoma_lanceolatum.BraLan2.pep.all.fa"
+params.predownloaded_fasta= "./Background_species_folder/*"
+params.predownloaded_gofiles= "./Background_gofiles_folder/*"
+params.outdir = "results"
+params.download= false
+
+2. To test on an example (full) dataset using insect downloads:
 
 ```
-nextflow run main.nf -profile myriad --ensembl_dataset example_insects.txt --download true -bg --focal My_polybia_prots 
+nextflow run main.nf -profile myriad --ensembl_dataset example_insects.txt --download true -bg --focal My_polybia_prots --ensembl_repo metazoa_mart --ensembl_host https://metazoa.ensembl.org
 ```
 
+#Notice you need to redirect to the insect ensembl section: with repo and host.
 
-To test orthofinder options use:
+
+
+
+
+
+
+#Testing other features (in development)
+
+1. To test orthofinder options use:
 ```
 docker run -it --rm davidemms/orthofinder:2.5.4 orthofinder -h
 docker run -it --rm chriswyatt/goatee_biomart R
@@ -32,7 +51,7 @@ awk '/^>/ {printf("%s%s\t",(N>0?"\n":""),$0);N++;next;} {printf("%s",$0);} END {
 These lines are helpful to explore biomaRt :
 
 
-To check what species are present and their species name codes:
+2. To check what species are present and their species name codes:
 
 ```
 library(biomaRt)
