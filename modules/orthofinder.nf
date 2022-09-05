@@ -11,7 +11,7 @@ process ORTHOFINDER {
 
     script:
     """
-        count = `ls -1 *.gz 2>/dev/null | wc -l`
+        count=`ls -1 *.gz 2>/dev/null | wc -l`
         if [ \$count != 0 ]
         then
 	gunzip *.gz
