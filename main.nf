@@ -67,12 +67,12 @@ if (params.download) {
 
 input_target_proteins_1 = channel
 	.fromPath(params.focal)
-	.ifEmpty { error "Cannot find the list of protein files (v1): ${params.focal}" }
+	.ifEmpty { error "Cannot find the protein file (v1): ${params.focal}" }
 
-//Copy inpuit focal sample channel.
+//Copy input focal sample channel.
 input_target_proteins_2 = channel
 	.fromPath(params.focal)
-	.ifEmpty { error "Cannot find the list of protein files (v2): ${params.focal}" }
+	.ifEmpty { error "Cannot find the protein file (v2): ${params.focal}" }
 
 
 workflow {

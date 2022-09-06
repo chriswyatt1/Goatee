@@ -4,15 +4,16 @@ process GO_ASSIGN {
     //stageInMode 'copy'
     
     input:
-        path "*.go.txt"
-        path 'Orthogroups.tsv'
-        path 'Focal_fasta'
+        path "*go.txt"
+        path Orthogroups
+        path Focal
 
     output:
-        path("Go_hash.tsv") , emit: go_hash
+        path("Result_All_Combine_GO_format") , emit: go_hash
 
     script:
     """
-        ls
+        perl -pe 's/\r\n|\n|\r/\n/g' ${Orthogroups} > Orthogroups.nomac.tsv
+	Goatee_ortho_go_match.pl Orthogroups.nomac.tsv ${Focal}
     """
 }
