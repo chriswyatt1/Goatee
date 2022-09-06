@@ -4,7 +4,7 @@ process GO_ASSIGN {
     //stageInMode 'copy'
     
     input:
-        path "*go.txt"
+        path Go_files
         path Orthogroups
         path Focal
 

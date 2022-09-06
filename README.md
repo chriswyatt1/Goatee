@@ -21,6 +21,12 @@ params.predownloaded_gofiles= "./Background_gofiles_folder/*"
 params.outdir = "results"
 params.download= false
 
+To run on UCL myriad, you use the following command:
+`nextflow run main.nf -bg -profile myriad -resume --focal Branchiostoma_lanceolatum.BraLan2.pep.all.fa`
+
+`-resume`: ensure you continue from the last workable part of the pipeline.
+`--focal Branchiostoma_lanceolatum.BraLan2.pep.all.fa`: explicitely says which file is the focal sample.
+
 2. To test on an example (full) dataset using insect downloads:
 
 ```
@@ -28,7 +34,9 @@ nextflow run main.nf -profile myriad --ensembl_dataset example_insects.txt --dow
 ```
 
 #Notice you need to redirect to the insect ensembl section: with repo and host.
-
+#You can work out which repo to use by following the later code below (section 2). Where you can search for samples on the ensembl database.
+#Sometimes Ensembl biomart is down with error code 500, meaning you may need to download samples manually
+`--download true`: tells the program to download the samples from ensembl
 
 
 
