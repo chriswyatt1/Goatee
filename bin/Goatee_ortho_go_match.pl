@@ -66,7 +66,7 @@ foreach my $col (@split_head){
 		}
 	}
 	#If we find the focal column:
-	elsif($FOCAL eq "$col\.fa"){
+	elsif($FOCAL eq "$col\.fa" || $FOCAL eq "$col\.fasta"){
 		$col_to_sp_store{$colposition}=$FOCAL;
 	}
 	#Else, means we probably messed up or a typo:
