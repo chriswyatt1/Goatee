@@ -8,3 +8,4 @@ nextflow
 /.nextflow/history
 results
 lib
+Focal_targets/*
