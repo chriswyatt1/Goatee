@@ -10,10 +10,20 @@ open(my $filein, "<", $ORTHOFINDER)   or die "Could not open $ORTHOFINDER\n";
 
 my $FOCAL = $ARGV[1];
 #open(my $focal, "<", $FOCAL)   or die "Could not open $FOCAL\n";
+if ($FOCAL =~ m/gz$/){
+	my @sl=split(".gz", $FOCAL);
+	my $NEWFOCAL = "$sl[0]";
+	`zcat $FOCAL > $NEWFOCAL`;
+	$FOCAL = $NEWFOCAL;
+	print "ungzipping\n";
+}
+else{
+	print "nah\n";
+}
 
 my $outfile="Result_All_Data";
 open(my $outhandle, ">", $outfile)   or die "Could not open $outfile \n";
-my $outfile2="Result_All_Combine_GO_format";
+my $outfile2="$FOCAL\_Result_All_Combine_GO_format";
 open(my $outhandle2, ">", $outfile2)   or die "Could not open $outfile2 \n";
 
 #
@@ -94,7 +104,7 @@ while (my $line=<$filein>){
 	foreach my $sp_line (@split){
 
 		my $species=$col_to_sp_store{$current_col};
-
+		#print "SPECIES $species\n\n";
 		my @genes=split(", ",$sp_line);
 
 
@@ -108,6 +118,7 @@ while (my $line=<$filein>){
 		}
 		#else for the rest of the species we find the gene go hash entries for each gene:
 		else{
+			#print "No: $FOCAL eq $species\n";
 			foreach my $gene (@genes){
 				if ($Nested_species_go_store{$species}{$gene}){
 					if ($target_orthoid_to_GOterms{$orthogroup_name}{$species}){
@@ -136,10 +147,11 @@ foreach my $focal_genes ( keys %focal_to_orthofinder_store ){
 
 	my $OG=$focal_to_orthofinder_store{$focal_genes};
 	
-	#print "$focal_genes\t$focal_to_orthofinder_store{$focal_genes}\n";
+	#print "$OG\t$focal_genes\t$focal_to_orthofinder_store{$focal_genes}\n";
 
 	
 	foreach my $species ( keys %{ $target_orthoid_to_GOterms{$OG} } ){
+		#print "here something $species\n";
 		my $goterms=$target_orthoid_to_GOterms{$OG}{$species};
 		print $outhandle "$focal_genes\t$OG\t$species\t$goterms\n";
 		my @goterms_sep=split("\t", $goterms);
@@ -157,4 +169,4 @@ foreach my $focal_genes ( keys %focal_to_orthofinder_store ){
 }
 
 
-
+print "Finished\n";
