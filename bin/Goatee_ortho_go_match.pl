@@ -23,7 +23,7 @@ else{
 
 my $outfile="Result_All_Data";
 open(my $outhandle, ">", $outfile)   or die "Could not open $outfile \n";
-my $outfile2="Result_All_Combine_GO_format";
+my $outfile2="$FOCAL\_Result_All_Combine_GO_format";
 open(my $outhandle2, ">", $outfile2)   or die "Could not open $outfile2 \n";
 
 #

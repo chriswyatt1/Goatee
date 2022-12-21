@@ -9,7 +9,7 @@ process GO_ASSIGN {
         path Focal
 
     output:
-        path("Result_All_Combine_GO_format") , emit: go_hash
+        path("${Focal}_Result_All_Combine_GO_format") , emit: go_hash
 
     script:
     """
