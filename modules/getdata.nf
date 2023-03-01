@@ -1,6 +1,7 @@
 process GET_DATA {
     label 'get_data_biomaRt'
-    publishDir "$params.outdir/GO_files/"
+    publishDir "$params.outdir/GO_files/Background_gofiles_folder", pattern: "*.go.txt", mode: 'copy'
+    publishDir "$params.outdir/GO_files/Background_species_folder", pattern: "*.fasta", mode: 'copy'
     
     input:
         val(ensembl_repo)
