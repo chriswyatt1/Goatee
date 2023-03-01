@@ -1,5 +1,6 @@
 process GET_DATA {
     label 'get_data_biomaRt'
+    publishDir "$params.outdir/GO_files/"
     
     input:
         val(ensembl_repo)
