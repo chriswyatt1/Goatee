@@ -39,6 +39,7 @@ log.info """\
 include { GET_DATA } from './modules/getdata.nf'
 include { ORTHOFINDER } from './modules/orthofinder.nf'
 include { GO_ASSIGN } from './modules/go_assign.nf'
+include { GO_ANALYSIS } from './modules/go_ananlysis.nf'
 
 channel.fromPath(params.focal).set{ input_target_proteins_1 }
 channel.fromPath(params.focal).set{ input_target_proteins_2 }
@@ -70,7 +71,7 @@ workflow {
 	}
     ORTHOFINDER ( proteins_ch )
     GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, input_target_proteins_2)
-
+    GO_ANALYSIS ( ORTHOFINDER.out.orthologues , GO_ASSIGN.out.go_hash )
 }
 
 workflow.onComplete {
