@@ -39,7 +39,7 @@ log.info """\
 include { GET_DATA } from './modules/getdata.nf'
 include { ORTHOFINDER } from './modules/orthofinder.nf'
 include { GO_ASSIGN } from './modules/go_assign.nf'
-include { GO_ANALYSIS } from './modules/go_ananlysis.nf'
+include { GO_ANALYSIS } from './modules/go_analysis.nf'
 
 channel.fromPath(params.focal).set{ input_target_proteins_1 }
 channel.fromPath(params.focal).set{ input_target_proteins_2 }

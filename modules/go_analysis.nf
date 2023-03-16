@@ -1,4 +1,4 @@
-process GO_ASSIGN {
+process GO_ANALYSIS {
     label 'go_analysis'
     publishDir "$params.outdir/Go_Analysis/"
     stageInMode 'copy'
