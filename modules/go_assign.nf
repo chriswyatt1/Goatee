@@ -15,5 +15,8 @@ process GO_ASSIGN {
     """
         perl -pe 's/\r\n|\n|\r/\n/g' ${Orthogroups} > Orthogroups.nomac.tsv
 	    Goatee_ortho_go_match.pl Orthogroups.nomac.tsv ${Focal}
+        Calc_duplicated.pl Orthogroups.nomac.tsv
+        ChopGO_VTS2.pl -i ${Focal}_duplicated.txt --GO_file ${Focal}_Result_All_Combine_GO_format
+        ChopGO_VTS2.pl -i ${Focal}_singlecopy.txt --GO_file ${Focal}_Result_All_Combine_GO_format
     """
 }
