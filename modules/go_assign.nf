@@ -1,8 +1,10 @@
 process GO_ASSIGN {
     label 'go_assignment'
+    tag "GO_assign_${Focal}"
     publishDir "$params.outdir/Go/"
     stageInMode 'copy'
-    
+    errorStrategy = 'ignore'    
+
     input:
         path Go_files
         path Orthogroups
@@ -10,6 +12,7 @@ process GO_ASSIGN {
 
     output:
         path("${Focal}_Result_All_Combine_GO_format") , emit: go_hash
+	path("*results_ALL.tab.pdf") , emit:duplicate_go
 
     script:
     """

@@ -53,6 +53,6 @@ while (my $line=<$filein>){
 }
 
 print "Now run the GO enrichment test\n\n";
-`perl ./ChopGO_VTS2.pl -i $species\_duplications.txt --GO_file $in_gofile`
+`ChopGO_VTS2.pl -i $species\_duplications.txt --GO_file $in_gofile`
 #print "Will run:\n\nperl ./ChopGO_VTS2.pl -i $species\_duplications.txt --GO_file $in_gofile\n";
 
