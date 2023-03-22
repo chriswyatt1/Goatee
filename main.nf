@@ -3,7 +3,7 @@
  */
  
 
- /*
+/*
  * Authors:
  * - Chris Wyatt <chris.wyatt@seqera.io>
  */
@@ -26,6 +26,9 @@ params.download= false
 //For CPU and Memory of each process: see conf/docker.config
 
 log.info """\
+ ===================================
+	GOATEE
+
  ===================================
  focal species                        : ${params.focal}
  list of background species           : ${params.ensembl_dataset}
