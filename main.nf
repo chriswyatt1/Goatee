@@ -72,6 +72,8 @@ workflow {
     
 	LONGEST ( GFFREAD.out.proteins )
 
+	merge_ch = LONGEST.out.collect()
+
 	if (params.download){
 		background_species = channel
 			.fromPath(params.ensembl_dataset) 
@@ -90,15 +92,14 @@ workflow {
 
 		GET_DATA.out.gene_ontology_files.set{ go_file_ch }
 
+		GET_DATA.out.fasta_files.mix(merge_ch).collect().set{ proteins_ch }
+
 	}
 	else{
-		channel.fromPath(params.predownloaded_fasta).mix(input_target_proteins_1).collect().set{ proteins_ch }
+		channel.fromPath(params.predownloaded_fasta).mix(merge_ch).collect().set{ proteins_ch }
 		channel.fromPath(params.predownloaded_gofiles).collect().set{ go_file_ch }
 	}
 
-	merge_ch = LONGEST.out.collect()
-
-	proteins_ch = GET_DATA.out.fasta_files.mix(merge_ch).collect()
 
 	ORTHOFINDER ( proteins_ch )
 	
