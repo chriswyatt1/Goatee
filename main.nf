@@ -102,8 +102,11 @@ workflow {
 
 
 	ORTHOFINDER ( proteins_ch )
+
+	//GFFREAD.out.proteins.view()
+	//LONGEST.out.view()
 	
-	GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, input_target_proteins_2)
+	GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, LONGEST.out )
 	
 	GO_EXPANSION ( GO_ASSIGN.out.go_counts.collect() )
 }

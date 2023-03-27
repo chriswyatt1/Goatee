@@ -14,6 +14,7 @@ process GFFREAD {
         path( "${sample_id}.splicedcds.fa" )
         path( "${sample_id}.splicedexons.fa" )
         path( "${sample_id}.gff_for_jvci.gff3" )
+	path( "${sample_id}_gene_alltran_list.txt" ), emit: gene_to_isoforms
 
     script:
     """
@@ -58,7 +59,7 @@ fi
 
     fi
 
-    
+	gff_to_genetranshash.pl     
     """
 }
 
