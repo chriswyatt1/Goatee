@@ -11,6 +11,9 @@ process ORTHOFINDER {
 
     script:
     """
+	ulimit -Hn
+	ulimit -Sn
+	#echo "ulimit -l 10000" >> /etc/init.d/sgeexecd.frontend
         count=`ls -1 *.gz 2>/dev/null | wc -l`
         if [ \$count != 0 ]
         then

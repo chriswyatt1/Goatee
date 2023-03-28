@@ -3,7 +3,7 @@
  */
  
 
- /*
+/*
  * Authors:
  * - Chris Wyatt <chris.wyatt@seqera.io>
  */
@@ -13,6 +13,7 @@
  * given `params.genome` specify on the run command line `--outdir /path/to/outdir`.
  */
 
+params.input= "data/Example.csv"
 params.ensembl_repo="metazoa_mart"
 params.ensembl_host='https://metazoa.ensembl.org'
 params.ensembl_dataset="example.txt"
@@ -27,6 +28,9 @@ params.download= false
 
 log.info """\
  ===================================
+	GOATEE v2.0
+
+ ===================================
  focal species                        : ${params.focal}
  list of background species           : ${params.ensembl_dataset}
  out directory                        : ${params.outdir}
@@ -39,11 +43,36 @@ log.info """\
 include { GET_DATA } from './modules/getdata.nf'
 include { ORTHOFINDER } from './modules/orthofinder.nf'
 include { GO_ASSIGN } from './modules/go_assign.nf'
+include { GO_EXPANSION  } from './modules/go_expansion.nf'
+include { DOWNLOAD_NCBI } from './modules/download_ncbi.nf'
+include { GFFREAD } from './modules/gffread.nf'
+include { LONGEST } from './modules/longest_orf.nf'
+
 
 channel.fromPath(params.focal).set{ input_target_proteins_1 }
 channel.fromPath(params.focal).set{ input_target_proteins_2 }
 
+
+Channel
+    .fromPath(params.input)
+    .splitCsv()
+    .branch { 
+        ncbi: it.size() == 2 
+        local: it.size() == 3
+    }
+    .set { input_type }
+
+
+
 workflow {
+
+	DOWNLOAD_NCBI ( input_type.ncbi )
+
+	GFFREAD ( DOWNLOAD_NCBI.out.genome.mix(input_type.local) )
+    
+	LONGEST ( GFFREAD.out.proteins )
+
+	merge_ch = LONGEST.out.collect()
 
 	if (params.download){
 		background_species = channel
@@ -60,17 +89,26 @@ workflow {
 			.ifEmpty { error "Cannot find the repo name: ${params.ensembl_repo}" }
 
 		GET_DATA ( input_repo, input_host, background_species )
-		GET_DATA.out.fasta_files.mix(input_target_proteins_1).collect().view().set{ proteins_ch }
+
 		GET_DATA.out.gene_ontology_files.set{ go_file_ch }
+
+		GET_DATA.out.fasta_files.mix(merge_ch).collect().set{ proteins_ch }
 
 	}
 	else{
-		channel.fromPath(params.predownloaded_fasta).mix(input_target_proteins_1).collect().set{ proteins_ch }
+		channel.fromPath(params.predownloaded_fasta).mix(merge_ch).collect().set{ proteins_ch }
 		channel.fromPath(params.predownloaded_gofiles).collect().set{ go_file_ch }
 	}
-    ORTHOFINDER ( proteins_ch )
-    GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, input_target_proteins_2)
 
+
+	ORTHOFINDER ( proteins_ch )
+
+	//GFFREAD.out.proteins.view()
+	//LONGEST.out.view()
+	
+	GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, LONGEST.out , GFFREAD.out.gene_to_isoforms.collect() )
+	
+	GO_EXPANSION ( GO_ASSIGN.out.go_counts.collect() )
 }
 
 workflow.onComplete {
