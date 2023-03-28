@@ -9,7 +9,7 @@ print "Please be in folder with the *expansion.txt files\n\n";
 my $ALL_go_terms=`cat *.txt | cut -f 1 | sort | uniq`;
 
 #Download the GO iD to name hash:
-`R --vanilla < download_go_names.R > output`;
+`download_go_names.R > output`;
 
 #Put go id to name infor into a hash.
 my %ID_to_name;

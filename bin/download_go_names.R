@@ -1,3 +1,4 @@
+#!/opt/conda/bin/Rscript --vanilla
 library(GO.db)
 go <- keys(GO.db, keytype="GOID")
 df <- select(GO.db, columns=c("GOID","TERM"), keys=go, keytype="GOID")

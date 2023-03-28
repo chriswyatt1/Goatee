@@ -106,7 +106,7 @@ workflow {
 	//GFFREAD.out.proteins.view()
 	//LONGEST.out.view()
 	
-	GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, LONGEST.out )
+	GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, LONGEST.out , GFFREAD.out.gene_to_isoforms.collect() )
 	
 	GO_EXPANSION ( GO_ASSIGN.out.go_counts.collect() )
 }

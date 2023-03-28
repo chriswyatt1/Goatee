@@ -9,11 +9,13 @@ process GO_ASSIGN {
         path Go_files
         path Orthogroups
         path Focal
+	path Gene_to_trans
 
     output:
         path("${Focal}_Result_All_Combine_GO_format") , emit: go_hash
 	path("*results_ALL.tab.pdf") , emit: duplicate_go
 	path("*family_expansions.txt") , emit: go_counts
+	path("*transcripts_Combine_GO_format.txt"), emit: trans_go
 
     script:
     """
@@ -21,5 +23,6 @@ process GO_ASSIGN {
 	Goatee_ortho_go_match.pl Orthogroups.nomac.tsv ${Focal}
         Orthofinder_duplicate_go.pl
 	Orthofinder_gene_expansion.pl
+	GO_make_isoform_hash.pl
     """
 }

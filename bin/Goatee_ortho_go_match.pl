@@ -89,7 +89,8 @@ foreach my $col (@split_head){
 }
 
 
-print "\n\nRead in the Orthofinder to GO information ( step 1 )\n\nStep 2: Matching focal genes to Orthofinder orthologs and stripping GO assiugnments\n\n";
+print "\n\nRead in the Orthofinder to GO information ( step 1 )\n\n";
+print "Step 2: Matching focal genes to Orthofinder orthologs and stripping GO assiugnments\n\n";
 
 #Now read through the rest of the orthofinder file to match each Orthogroups genes for each species to its corresponding lines in their GO files. So we can get for say orthogroup 000001: Apis has two genes, and they have 30 GO annotations from their ensembl ortho data.
 my %focal_to_orthofinder_store;
@@ -102,36 +103,37 @@ while (my $line=<$filein>){
 	my $current_col=0;
 	
 	foreach my $sp_line (@split){
-
+		#print "$sp_line\n";
 		my $species=$col_to_sp_store{$current_col};
-		#print "SPECIES $species\n\n";
-		my @genes=split(", ",$sp_line);
+		if ($species){
+			
+			my @genes=split(", ",$sp_line);
 
 
-		#If the focal species, just add a key from focal gene ID to Orthogroup ID:
-		#print "HERE: $FOCAL eq $species\n";
-		if ($FOCAL eq "$species"){
-			#print "yes\n";
-			foreach my $gene (@genes){
-				$focal_to_orthofinder_store{$gene}=$orthogroup_name;
+			#If the focal species, just add a key from focal gene ID to Orthogroup ID:
+			#print "HERE: $FOCAL eq $species\n";
+			if ($FOCAL eq "$species"){
+				#print "yes\n";
+				foreach my $gene (@genes){
+					$focal_to_orthofinder_store{$gene}=$orthogroup_name;
+				}
 			}
-		}
-		#else for the rest of the species we find the gene go hash entries for each gene:
-		else{
-			#print "No: $FOCAL eq $species\n";
-			foreach my $gene (@genes){
-				if ($Nested_species_go_store{$species}{$gene}){
-					if ($target_orthoid_to_GOterms{$orthogroup_name}{$species}){
-						my $old=$target_orthoid_to_GOterms{$orthogroup_name}{$species};
-						$target_orthoid_to_GOterms{$orthogroup_name}{$species}="$old\t$Nested_species_go_store{$species}{$gene}";
-					}
-					else{
-						$target_orthoid_to_GOterms{$orthogroup_name}{$species}=$Nested_species_go_store{$species}{$gene};
+			#else for the rest of the species we find the gene go hash entries for each gene:
+			else{
+				#print "No: $FOCAL eq $species\n";
+				foreach my $gene (@genes){
+					if ($Nested_species_go_store{$species}{$gene}){
+						if ($target_orthoid_to_GOterms{$orthogroup_name}{$species}){
+							my $old=$target_orthoid_to_GOterms{$orthogroup_name}{$species};
+							$target_orthoid_to_GOterms{$orthogroup_name}{$species}="$old\t$Nested_species_go_store{$species}{$gene}";
+						}
+						else{
+							$target_orthoid_to_GOterms{$orthogroup_name}{$species}=$Nested_species_go_store{$species}{$gene};
+						}
 					}
 				}
 			}
 		}
-		
 		$current_col++;
 	}
 }
