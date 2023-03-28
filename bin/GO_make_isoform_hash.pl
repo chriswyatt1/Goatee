@@ -11,7 +11,7 @@ chomp $in_gofile;
 my @namesplit=split(/\./, $in_gofile);
 my $species=$namesplit[0];
 
-my $gene2tran="$species\_gene_alltran_list.txt";
+my $gene2tran="$species\.gene_alltran_list.txt";
 
 print "My species is $species\n\n";
 
