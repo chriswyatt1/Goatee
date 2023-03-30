@@ -17,7 +17,7 @@ print "My species is $species\n\n";
 
 open(my $filein, "<", $in_gofile)   or die "Could not open $in_gofile\n";
 
-my $out="$species\_transcripts_Combine_GO_format.txt";
+my $out="$species\.transcripts_Combine_GO_format.txt";
 open(my $fileout, ">", $out)   or die "Could not open $out\n";
 
 

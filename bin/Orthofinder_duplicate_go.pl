@@ -46,6 +46,10 @@ while (my $line=<$filein>){
 	    	#print "$genes\n";
 	    	my @all=split(/, /, $genes);
 	    	foreach my $bit (@all){
+			#if the gene starts with a number, add a letter before it.
+			if ($bit =~ /^\d/){
+				$bit="GENE_$bit";
+			}
 	    		print $fileout "$bit\n";
 	    	}
 	    }

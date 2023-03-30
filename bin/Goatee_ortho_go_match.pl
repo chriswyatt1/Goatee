@@ -163,6 +163,9 @@ foreach my $focal_genes ( keys %focal_to_orthofinder_store ){
 				#do nothing, already in final doc.
 			}
 			else{
+				if($focal_genes =~ /^\d/){
+					$focal_genes="GENE_$focal_genes";
+				}
 				print $outhandle2 "$focal_genes\t$terms\n";
 				$done{$combtest}="DONE";
 			}
