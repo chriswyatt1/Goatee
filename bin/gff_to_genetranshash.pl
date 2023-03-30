@@ -55,7 +55,8 @@ while (my $line=<$filein>){
 		    	}
 		    	my $fullgene=$temp_h{"Parent"};
 		    	my @fullsp=split("\:", $fullgene);
-		    	$gene=$fullsp[-1];
+			my @fullminusdash=split("\-",$fullsp[-1]);
+		    	$gene=$fullminusdash[-1];
 		    	$tran=$temp_h{"transcript_id"};
 		    }
 

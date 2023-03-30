@@ -46,6 +46,7 @@ while (my $seq = $seqio->next_seq){ ## selects one sequence at a time
                 if ($LOC_to_transcriptid{$obs[1]}){
                     my $old=$LOC_to_transcriptid{$obs[1]};
                     $LOC_to_transcriptid{$obs[1]}="$old\t$genename";
+		    #print "$obs[1] $LOC_to_transcriptid{$obs[1]}\n";
                 }
                 else{
                     $LOC_to_transcriptid{$obs[1]}=$genename;
@@ -55,6 +56,7 @@ while (my $seq = $seqio->next_seq){ ## selects one sequence at a time
                     die "This should not happen, means a transcript ID was found twice.\n";
                 }
                 else{
+		    #print "$genename\t$string\n";
                     $transcriptid_to_seq{$genename}=$string;
                     $transcriptid_to_LOC{$genename}=$obs[1];
                     my @tmp_split=split(/\./, $genename);
@@ -73,6 +75,7 @@ foreach my $key ( sort keys %LOC_to_transcriptid){
     my $best;
     my $bestseq;
     $uniq_gene_count++;
+    #print "$key $LOC_to_transcriptid{$key}\n";
     foreach my $trans (@vals){
         my $length=length($transcriptid_to_seq{$trans});
         if ($length >= $longest){
@@ -84,7 +87,7 @@ foreach my $key ( sort keys %LOC_to_transcriptid){
             #do nothing;
         }
     }
-    print $outhandle ">$transcriptid_to_shortid{$best}\n$bestseq\n";
+    print $outhandle ">$transcriptid_to_LOC{$best}\n$bestseq\n";
 	#$transcriptid_to_shortid{$best}
 }
 
