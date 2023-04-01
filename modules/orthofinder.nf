@@ -8,6 +8,7 @@ process ORTHOFINDER {
                
     output:
         path("My_result/*/Orthogroups/Orthogroups.tsv") , emit: orthologues
+	path("My_result/*/Species_Tree/SpeciesTree_rooted_node_labels.txt") , emit:speciestree
 
     script:
     """
