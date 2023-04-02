@@ -45,7 +45,7 @@ open(my $fileout, ">", $out)   or die "Could not open $out\n";
 
 
 #Print header:
-print $fileout "GO_term\tGO_name";
+print $fileout "Desc\tFamily ID";
 foreach my $species (keys %species_go_hash){
 	print $fileout "\t$species";
 }
@@ -53,7 +53,7 @@ print $fileout "\n";
 
 #Print table contents
 foreach my $GO_terms (keys %ID_to_name){
-	print $fileout "$GO_terms\t$ID_to_name{$GO_terms}";
+	print $fileout "$ID_to_name{$GO_terms}\t$GO_terms";
 
 	#Now for each species fill in the number of genes associated with each term.
 	foreach my $species (keys %species_go_hash){
