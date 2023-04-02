@@ -22,7 +22,7 @@ params.predownloaded_fasta= "./Background_species_folder/*"
 params.predownloaded_gofiles= "./Background_gofiles_folder/*"
 params.outdir = "results"
 params.download= false
-
+params.cafe= false
 
 //For CPU and Memory of each process: see conf/docker.config
 
@@ -47,7 +47,7 @@ include { GO_EXPANSION  } from './modules/go_expansion.nf'
 include { DOWNLOAD_NCBI } from './modules/download_ncbi.nf'
 include { GFFREAD } from './modules/gffread.nf'
 include { LONGEST } from './modules/longest_orf.nf'
-
+include { CAFE } from './modules/cafe.nf'
 
 channel.fromPath(params.focal).set{ input_target_proteins_1 }
 channel.fromPath(params.focal).set{ input_target_proteins_2 }
@@ -109,6 +109,12 @@ workflow {
 	GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, LONGEST.out , GFFREAD.out.gene_to_isoforms.collect() )
 	
 	GO_EXPANSION ( GO_ASSIGN.out.go_counts.collect() )
+
+	if (params.cafe){
+
+		CAFE ( GO_EXPANSION.out.go_count_table , ORTHOFINDER.out.speciestree , go_file_ch )	
+
+	}
 }
 
 workflow.onComplete {

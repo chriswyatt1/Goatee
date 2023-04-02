@@ -4,6 +4,7 @@ process GO_ASSIGN {
     publishDir "$params.outdir/Go/"
     stageInMode 'copy'
     errorStrategy = 'ignore'    
+    container = 'chriswyatt/chopgo'
 
     input:
         path Go_files

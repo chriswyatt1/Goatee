@@ -4,6 +4,7 @@ process GO_EXPANSION {
     publishDir "$params.outdir/Go_expansion/"
     stageInMode 'copy'
     errorStrategy = 'ignore'    
+    container = 'chriswyatt/chopgo'
 
     input:
         path Go_counts
