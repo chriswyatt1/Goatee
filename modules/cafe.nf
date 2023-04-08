@@ -23,6 +23,6 @@ process CAFE {
 	sed -i 's/.prot.fa.largestIsoform//g' pruned_tree 	
 	echo \$EXCLUDED
 	cat pruned_tree
-	cafe5 -c 8 -i $Table -t pruned_tree
+	cafe5 -I 10 -i $Table -t pruned_tree
     """
 }

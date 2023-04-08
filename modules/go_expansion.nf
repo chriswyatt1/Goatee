@@ -10,7 +10,8 @@ process GO_EXPANSION {
         path Go_counts
 
     output:
-        path("GO_table_counts.tsv") , emit: go_count_table
+        path("GO_table_counts.tsv") , emit: go_count_all
+	path("GO_table_counts_forCAFE.tsv") , emit: go_count_table
 
     script:
     """
