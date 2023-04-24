@@ -30,49 +30,60 @@ while (my $line=<$filein>){
     my $tran;
     #ignore blank lines, starting with #/
     if ($line =~ /^#/){
-    	#do nothing
+        #do nothing
     }
     else{
-    	#print "$line\n";
-	    if ($split[2] eq "mRNA"){
-	   
-	    	#Do different split if AUGUSTUS or NCBI
-		    if ($split[1] eq "AUGUSTUS"){
-		    	#Its an AUGUSTUS GFF
-		    	my @lsplit=split("\;", $split[8]);
-		    	my @genesp=split("\=", $lsplit[1]);
-		    	my @transp=split("\=", $lsplit[0]);
-		    	$gene=$genesp[1];
-		    	$tran=$transp[1];
-		    }
-		    else{
-		    	#Its probably a normal NCBI type:
-		    	my @lsplit=split("\;", $split[8]);
-		    	my %temp_h;
-		    	foreach my $bits (@lsplit){
-		    		my @spbit=split("\=", $bits);
-		    		$temp_h{$spbit[0]}=$spbit[1];
-		    	}
-		    	my $fullgene=$temp_h{"Parent"};
-		    	my @fullsp=split("\:", $fullgene);
-			my @fullminusdash=split("\-",$fullsp[-1]);
-		    	$gene=$fullminusdash[-1];
-		    	$tran=$temp_h{"transcript_id"};
-		    }
+        #print "$line\n";
+        if ($split[2] eq "mRNA"){
+       
+            #Do different split if AUGUSTUS or NCBI
+            if ($split[1] eq "AUGUSTUS"){
+                #Its an AUGUSTUS GFF
+                my @lsplit=split("\;", $split[8]);
+                my @genesp=split("\=", $lsplit[1]);
+                my @transp=split("\=", $lsplit[0]);
+                $gene=$genesp[1];
+                $tran=$transp[1];
+            }
+            elsif($split[1] eq "maker"){
+                #Its probably a maker gff with ID and Parent for gene and transcript isoform names:
+                my @lsplit=split("\;", $split[8]);
+                my %temp_h;
+                foreach my $bits (@lsplit){
+                    my @spbit=split("\=", $bits);
+                    $temp_h{$spbit[0]}=$spbit[1];
+                }
+                $gene=$temp_h{"Parent"};
+                $tran=$temp_h{"ID"};
+            }
+            else{
+                #Its probably a normal NCBI type:
+                my @lsplit=split("\;", $split[8]);
+                my %temp_h;
+                foreach my $bits (@lsplit){
+                    my @spbit=split("\=", $bits);
+                    $temp_h{$spbit[0]}=$spbit[1];
+                }
+                my $fullgene=$temp_h{"Parent"};
+                my @fullsp=split("\:", $fullgene);
+                my @fullminusdash=split("\-",$fullsp[-1]);
+                $gene=$fullminusdash[-1];
+                $tran=$temp_h{"transcript_id"};
+            }
 
 
-		    print $fileout "$gene\t$tran\n";
-		    if ($Gene_tran_hash{$gene}){
-		    	my $old=$Gene_tran_hash{$gene};
-		    	$Gene_tran_hash{$gene}="$old\,$tran";
-		    }
-		    else{
-		    	$Gene_tran_hash{$gene}=$tran;
-		    }
-	    }
+            print $fileout "$gene\t$tran\n";
+            if ($Gene_tran_hash{$gene}){
+                my $old=$Gene_tran_hash{$gene};
+                $Gene_tran_hash{$gene}="$old\,$tran";
+            }
+            else{
+                $Gene_tran_hash{$gene}=$tran;
+            }
+        }
     }
 }
 
 foreach my $key (keys %Gene_tran_hash){
-	print $fileout2 "$key\t$Gene_tran_hash{$key}\n";
+    print $fileout2 "$key\t$Gene_tran_hash{$key}\n";
 }
