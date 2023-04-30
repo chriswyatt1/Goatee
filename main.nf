@@ -23,6 +23,7 @@ params.predownloaded_gofiles= "./Background_gofiles_folder/*"
 params.outdir = "results"
 params.download= false
 params.cafe= false
+params.chromo_go= false
 
 //For CPU and Memory of each process: see conf/docker.config
 
@@ -48,6 +49,7 @@ include { DOWNLOAD_NCBI } from './modules/download_ncbi.nf'
 include { GFFREAD } from './modules/gffread.nf'
 include { LONGEST } from './modules/longest_orf.nf'
 include { CAFE } from './modules/cafe.nf'
+include { CHROMO_GO } from './modules/chromo_go.nf'
 
 channel.fromPath(params.focal).set{ input_target_proteins_1 }
 channel.fromPath(params.focal).set{ input_target_proteins_2 }
@@ -103,9 +105,6 @@ workflow {
 
 	ORTHOFINDER ( proteins_ch )
 
-	//GFFREAD.out.proteins.view()
-	//LONGEST.out.view()
-	
 	GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, LONGEST.out , GFFREAD.out.gene_to_isoforms.collect() )
 	
 	GO_EXPANSION ( GO_ASSIGN.out.go_counts.collect() )
@@ -115,6 +114,12 @@ workflow {
 		CAFE ( GO_EXPANSION.out.go_count_table , ORTHOFINDER.out.speciestree , go_file_ch )	
 
 	}
+
+	if (params.chromo_go){
+
+		CHROMO_GO ( GFFREAD.out.gffs.collect() , GO_ASSIGN.out.go_hash.collect() , ORTHOFINDER.out.orthologues )
+	}
+
 }
 
 workflow.onComplete {

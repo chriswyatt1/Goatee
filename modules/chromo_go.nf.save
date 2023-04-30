@@ -1,8 +1,8 @@
-process GFFREAD {
-    label 'gffread'
+process CHROMO_GO {
+    label 'chromo_go'
     tag "$sample_id"
-    container = 'chriswyatt/gffread_python3:v2'
-    publishDir "$params.outdir/Gffread" , mode: "copy"
+    container = 'chriswyatt/chopgo'
+    publishDir "$params.outdir/Chromo_Go" , mode: "copy"
              
     input:
 
@@ -13,7 +13,7 @@ process GFFREAD {
         path( "${sample_id}.prot.fa" ), emit: proteins
         path( "${sample_id}.splicedcds.fa" )
         path( "${sample_id}.splicedexons.fa" )
-        path( "${sample_id}.gff_for_jvci.gff3" ), emit: gffs
+        path( "${sample_id}.gff_for_jvci.gff3" )
 	path( "${sample_id}_gene_alltran_list.txt" ), emit: gene_to_isoforms
 
     script:
