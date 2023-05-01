@@ -1,7 +1,7 @@
 process GFFREAD {
     label 'gffread'
     tag "$sample_id"
-    container = 'chriswyatt/gffread_python3:v2'
+    container = 'chriswyatt/bioseqio_gffread'
     publishDir "$params.outdir/Gffread" , mode: "copy"
              
     input:
@@ -11,6 +11,7 @@ process GFFREAD {
     output:
 
         path( "${sample_id}.prot.fa" ), emit: proteins
+	path( "${sample_id}.prot.fa.largestIsoform.fa" ), emit: longest
         path( "${sample_id}.splicedcds.fa" )
         path( "${sample_id}.splicedexons.fa" )
         path( "${sample_id}.gff_for_jvci.gff3" ), emit: gffs
@@ -59,7 +60,9 @@ fi
 
     fi
 
-	gff_to_genetranshash.pl     
+	gff_to_genetranshash.2.pl
+	prot_fasta_to_longest.pl ${sample_id}.prot.fa ${sample_id}_longestisoform.txt
+	     
     """
 }
 

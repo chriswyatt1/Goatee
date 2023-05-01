@@ -32,7 +32,7 @@ log.info """\
 	GOATEE v2.0
 
  ===================================
- focal species                        : ${params.focal}
+ input file                           : ${params.input}
  list of background species           : ${params.ensembl_dataset}
  out directory                        : ${params.outdir}
  """
@@ -47,7 +47,6 @@ include { GO_ASSIGN } from './modules/go_assign.nf'
 include { GO_EXPANSION  } from './modules/go_expansion.nf'
 include { DOWNLOAD_NCBI } from './modules/download_ncbi.nf'
 include { GFFREAD } from './modules/gffread.nf'
-include { LONGEST } from './modules/longest_orf.nf'
 include { CAFE } from './modules/cafe.nf'
 include { CHROMO_GO } from './modules/chromo_go.nf'
 
@@ -72,9 +71,9 @@ workflow {
 
 	GFFREAD ( DOWNLOAD_NCBI.out.genome.mix(input_type.local) )
     
-	LONGEST ( GFFREAD.out.proteins )
+	//LONGEST ( GFFREAD.out.proteins )
 
-	merge_ch = LONGEST.out.collect()
+	merge_ch = GFFREAD.out.longest.collect()
 
 	if (params.download){
 		background_species = channel
@@ -105,7 +104,7 @@ workflow {
 
 	ORTHOFINDER ( proteins_ch )
 
-	GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, LONGEST.out , GFFREAD.out.gene_to_isoforms.collect() )
+	GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, GFFREAD.out.longest , GFFREAD.out.gene_to_isoforms.collect() )
 	
 	GO_EXPANSION ( GO_ASSIGN.out.go_counts.collect() )
 
