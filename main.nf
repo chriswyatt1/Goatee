@@ -127,7 +127,7 @@ workflow {
 
 		if (params.cafe){
 
-			CAFE ( ORTHOFINDER_2.out.no_ortho  , ORTHOFINDER_2.out.speciestree , go_file_ch )	
+			CAFE ( ORTHOFINDER_2.out.no_ortho  , ORTHOFINDER_2.out.speciestree )	
 
 		}
 
@@ -137,7 +137,7 @@ workflow {
 		if (params.cafe){
 
 			ORTHOFINDER_2 ( merge_ch )
-			CAFE ( ORTHOFINDER_2.out.no_ortho  , ORTHOFINDER_2.out.speciestree , go_file_ch )	
+			CAFE ( ORTHOFINDER_2.out.no_ortho  , ORTHOFINDER_2.out.speciestree )	
 
 		}
 	}
