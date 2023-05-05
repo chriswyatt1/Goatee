@@ -43,6 +43,7 @@ log.info """\
 
 include { GET_DATA } from './modules/getdata.nf'
 include { ORTHOFINDER } from './modules/orthofinder.nf'
+include { ORTHOFINDER as ORTHOFINDER_2 } from './modules/orthofinder.nf'
 include { GO_ASSIGN } from './modules/go_assign.nf'
 include { GO_EXPANSION  } from './modules/go_expansion.nf'
 include { DOWNLOAD_NCBI } from './modules/download_ncbi.nf'
@@ -110,7 +111,9 @@ workflow {
 
 	if (params.cafe){
 
-		CAFE ( GO_EXPANSION.out.go_count_table , ORTHOFINDER.out.speciestree , go_file_ch )	
+		ORTHOFINDER_2 ( merge_ch )
+
+		CAFE ( ORTHOFINDER_2.out.no_ortho  , ORTHOFINDER_2.out.speciestree , go_file_ch )	
 
 	}
 
