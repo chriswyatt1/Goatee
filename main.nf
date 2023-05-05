@@ -10,7 +10,7 @@
 
 /*
  * Default pipeline parameters (on test data). They can be overriden on the command line eg.
- * given `params.genome` specify on the run command line `--outdir /path/to/outdir`.
+ * given `params.input` specify on the run command line `--input /path/to/input`.
  */
 
 params.input= "data/Example.csv"
@@ -22,8 +22,12 @@ params.predownloaded_fasta= "./Background_species_folder/*"
 params.predownloaded_gofiles= "./Background_gofiles_folder/*"
 params.outdir = "results"
 params.download= false
+
 params.cafe= false
 params.chromo_go= false
+params.orthofinder= false
+params.go_assign= false
+params.go_expansion= false
 
 //For CPU and Memory of each process: see conf/docker.config
 
@@ -71,55 +75,71 @@ workflow {
 	DOWNLOAD_NCBI ( input_type.ncbi )
 
 	GFFREAD ( DOWNLOAD_NCBI.out.genome.mix(input_type.local) )
-    
-	//LONGEST ( GFFREAD.out.proteins )
 
 	merge_ch = GFFREAD.out.longest.collect()
 
-	if (params.download){
-		background_species = channel
-			.fromPath(params.ensembl_dataset) 
-			.splitText().map{it -> it.trim()}    
-			.ifEmpty { error "Cannot find the dataset file: ${params.ensembl_dataset}" }
 
-		input_host = channel
-			.value(params.ensembl_host)
-			.ifEmpty { error "Cannot find the host name: ${params.ensembl_host}" }
+	if (params.go_assign){
+		if (params.download){
+			background_species = channel
+				.fromPath(params.ensembl_dataset) 
+				.splitText().map{it -> it.trim()}    
+				.ifEmpty { error "Cannot find the dataset file: ${params.ensembl_dataset}" }
 
-		input_repo = channel
-			.value(params.ensembl_repo)
-			.ifEmpty { error "Cannot find the repo name: ${params.ensembl_repo}" }
+			input_host = channel
+				.value(params.ensembl_host)
+				.ifEmpty { error "Cannot find the host name: ${params.ensembl_host}" }
 
-		GET_DATA ( input_repo, input_host, background_species )
+			input_repo = channel
+				.value(params.ensembl_repo)
+				.ifEmpty { error "Cannot find the repo name: ${params.ensembl_repo}" }
 
-		GET_DATA.out.gene_ontology_files.set{ go_file_ch }
+			GET_DATA ( input_repo, input_host, background_species )
 
-		GET_DATA.out.fasta_files.mix(merge_ch).collect().set{ proteins_ch }
+			GET_DATA.out.gene_ontology_files.set{ go_file_ch }
+
+			GET_DATA.out.fasta_files.mix(merge_ch).collect().set{ proteins_ch }
+
+		}
+		else{
+			channel.fromPath(params.predownloaded_fasta).mix(merge_ch).collect().set{ proteins_ch }
+			channel.fromPath(params.predownloaded_gofiles).collect().set{ go_file_ch }
+		}
+
+		ORTHOFINDER ( proteins_ch )
+
+		GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, GFFREAD.out.longest , GFFREAD.out.gene_to_isoforms.collect() )
+
+		if (params.go_expansion){
+			GO_EXPANSION ( GO_ASSIGN.out.go_counts.collect() )
+		}
+
+		if (params.chromo_go){
+			CHROMO_GO ( GFFREAD.out.gffs.collect() , GO_ASSIGN.out.go_hash.collect() , ORTHOFINDER.out.orthologues )
+		}
+
+
+	}
+	
+	if (params.orthofinder){
+		
+		ORTHOFINDER_2 ( merge_ch )
+
+		if (params.cafe){
+
+			CAFE ( ORTHOFINDER_2.out.no_ortho  , ORTHOFINDER_2.out.speciestree , go_file_ch )	
+
+		}
 
 	}
 	else{
-		channel.fromPath(params.predownloaded_fasta).mix(merge_ch).collect().set{ proteins_ch }
-		channel.fromPath(params.predownloaded_gofiles).collect().set{ go_file_ch }
-	}
 
+		if (params.cafe){
 
-	ORTHOFINDER ( proteins_ch )
+			ORTHOFINDER_2 ( merge_ch )
+			CAFE ( ORTHOFINDER_2.out.no_ortho  , ORTHOFINDER_2.out.speciestree , go_file_ch )	
 
-	GO_ASSIGN ( go_file_ch , ORTHOFINDER.out.orthologues, GFFREAD.out.longest , GFFREAD.out.gene_to_isoforms.collect() )
-	
-	GO_EXPANSION ( GO_ASSIGN.out.go_counts.collect() )
-
-	if (params.cafe){
-
-		ORTHOFINDER_2 ( merge_ch )
-
-		CAFE ( ORTHOFINDER_2.out.no_ortho  , ORTHOFINDER_2.out.speciestree , go_file_ch )	
-
-	}
-
-	if (params.chromo_go){
-
-		CHROMO_GO ( GFFREAD.out.gffs.collect() , GO_ASSIGN.out.go_hash.collect() , ORTHOFINDER.out.orthologues )
+		}
 	}
 
 }
