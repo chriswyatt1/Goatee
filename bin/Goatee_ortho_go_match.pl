@@ -11,20 +11,22 @@ open(my $filein, "<", $ORTHOFINDER)   or die "Could not open $ORTHOFINDER\n";
 my $FOCAL = $ARGV[1];
 #open(my $focal, "<", $FOCAL)   or die "Could not open $FOCAL\n";
 if ($FOCAL =~ m/gz$/){
-	my @sl=split(".gz", $FOCAL);
-	my $NEWFOCAL = "$sl[0]";
-	`zcat $FOCAL > $NEWFOCAL`;
-	$FOCAL = $NEWFOCAL;
-	print "ungzipping\n";
+  my @sl=split(".gz", $FOCAL);
+  my $NEWFOCAL = "$sl[0]";
+  `zcat $FOCAL > $NEWFOCAL`;
+  $FOCAL = $NEWFOCAL;
+  print "ungzipping\n";
 }
 else{
-	print "nah\n";
+  print "nah\n";
 }
 
 my $outfile="Result_All_Data";
 open(my $outhandle, ">", $outfile)   or die "Could not open $outfile \n";
 my $outfile2="$FOCAL\_Result_All_Combine_GO_format";
 open(my $outhandle2, ">", $outfile2)   or die "Could not open $outfile2 \n";
+my $outfile3="OG_GO_format.tsv";
+open(my $outhandle3, ">", $outfile3)   or die "Could not open $outfile3 \n";
 
 #
 print "\n#####################################################\n";
@@ -45,47 +47,47 @@ my %sp_store_to_col;
 my %Nested_species_go_store;
 
 foreach my $col (@split_head){
-	chomp $col;
-	#my @split_dot=split("\.", $col);
-	my $exp_gofile="$col\.go.txt";
-	print "Here: $col\.go.txt\n";
+  chomp $col;
+  #my @split_dot=split("\.", $col);
+  my $exp_gofile="$col\.go.txt";
+  print "Here: $col\.go.txt\n";
 
-	if (-e "$exp_gofile"){
-		$col_to_sp_store{$colposition}=$exp_gofile;
-		$sp_store_to_col{$exp_gofile}=$colposition;
-		#Read in the go txt files and make them into a hash of species gene ID to a list of all GO terms associated (e.g. ENS23523525 -> "GO:000032342,GO:0000248214")
-		my $GO="$exp_gofile";
-		open(my $goin, "<", $GO)   or die "Could not open $GO\n";
-		my $ignoreheader=<$goin>;
-		while (my $line=<$goin>){
-			chomp $goin;
-			my @sp=split("\t", $line);
-			my $gene=$sp[1];
-			my $go_id=$sp[2];
-			if ($go_id =~ m/GO/){
-				$go_id =~ s/\r\n|\n|\R|\r//g;
-				#print "<-$go_id\->\n";
-				if ($Nested_species_go_store{$exp_gofile}{$gene}){
-					my $old=$Nested_species_go_store{$exp_gofile}{$gene};
-					$Nested_species_go_store{$exp_gofile}{$gene}="$old\t$go_id";
-				}
-				else{
-					$Nested_species_go_store{$exp_gofile}{$gene}=$go_id;
-				}
-			}
-		}
-	}
-	#If we find the focal column:
-	elsif($FOCAL eq "$col\.fa" || $FOCAL eq "$col\.fasta"){
-		$col_to_sp_store{$colposition}=$FOCAL;
-	}
-	#Else, means we probably messed up or a typo:
-	else{
-		print "\n\n";
-		print "Did not find a match for $col, expected to be: $exp_gofile\nMake sure this is the behaviour you expect, else, maybe you didn't put the correctly titled file in the folder with the GO or protein files.\n";
-		print "\n\n";
-	}
-	$colposition++;
+  if (-e "$exp_gofile"){
+    $col_to_sp_store{$colposition}=$exp_gofile;
+    $sp_store_to_col{$exp_gofile}=$colposition;
+    #Read in the go txt files and make them into a hash of species gene ID to a list of all GO terms associated (e.g. ENS23523525 -> "GO:000032342,GO:0000248214")
+    my $GO="$exp_gofile";
+    open(my $goin, "<", $GO)   or die "Could not open $GO\n";
+    my $ignoreheader=<$goin>;
+    while (my $line=<$goin>){
+      chomp $goin;
+      my @sp=split("\t", $line);
+      my $gene=$sp[1];
+      my $go_id=$sp[2];
+      if ($go_id =~ m/GO/){
+        $go_id =~ s/\r\n|\n|\R|\r//g;
+        #print "<-$go_id\->\n";
+        if ($Nested_species_go_store{$exp_gofile}{$gene}){
+          my $old=$Nested_species_go_store{$exp_gofile}{$gene};
+          $Nested_species_go_store{$exp_gofile}{$gene}="$old\t$go_id";
+        }
+        else{
+          $Nested_species_go_store{$exp_gofile}{$gene}=$go_id;
+        }
+      }
+    }
+  }
+  #If we find the focal column:
+  elsif($FOCAL eq "$col\.fa" || $FOCAL eq "$col\.fasta"){
+    $col_to_sp_store{$colposition}=$FOCAL;
+  }
+  #Else, means we probably messed up or a typo:
+  else{
+    print "\n\n";
+    print "Did not find a match for $col, expected to be: $exp_gofile\nMake sure this is the behaviour you expect, else, maybe you didn't put the correctly titled file in the folder with the GO or protein files.\n";
+    print "\n\n";
+  }
+  $colposition++;
 }
 
 
@@ -96,46 +98,46 @@ print "Step 2: Matching focal genes to Orthofinder orthologs and stripping GO as
 my %focal_to_orthofinder_store;
 my %target_orthoid_to_GOterms;
 while (my $line=<$filein>){
-	chomp $filein;
-	#print "$line\n";
-	my @split=split("\t", $line);
-	my $orthogroup_name=shift @split; #Remove orthogroup column
-	my $current_col=0;
-	
-	foreach my $sp_line (@split){
-		#print "$sp_line\n";
-		my $species=$col_to_sp_store{$current_col};
-		if ($species){
-			
-			my @genes=split(", ",$sp_line);
+  chomp $filein;
+  #print "$line\n";
+  my @split=split("\t", $line);
+  my $orthogroup_name=shift @split; #Remove orthogroup column
+  my $current_col=0;
+  
+  foreach my $sp_line (@split){
+    #print "$sp_line\n";
+    my $species=$col_to_sp_store{$current_col};
+    if ($species){
+      
+      my @genes=split(", ",$sp_line);
 
 
-			#If the focal species, just add a key from focal gene ID to Orthogroup ID:
-			#print "HERE: $FOCAL eq $species\n";
-			if ($FOCAL eq "$species"){
-				#print "yes\n";
-				foreach my $gene (@genes){
-					$focal_to_orthofinder_store{$gene}=$orthogroup_name;
-				}
-			}
-			#else for the rest of the species we find the gene go hash entries for each gene:
-			else{
-				#print "No: $FOCAL eq $species\n";
-				foreach my $gene (@genes){
-					if ($Nested_species_go_store{$species}{$gene}){
-						if ($target_orthoid_to_GOterms{$orthogroup_name}{$species}){
-							my $old=$target_orthoid_to_GOterms{$orthogroup_name}{$species};
-							$target_orthoid_to_GOterms{$orthogroup_name}{$species}="$old\t$Nested_species_go_store{$species}{$gene}";
-						}
-						else{
-							$target_orthoid_to_GOterms{$orthogroup_name}{$species}=$Nested_species_go_store{$species}{$gene};
-						}
-					}
-				}
-			}
-		}
-		$current_col++;
-	}
+      #If the focal species, just add a key from focal gene ID to Orthogroup ID:
+      #print "HERE: $FOCAL eq $species\n";
+      if ($FOCAL eq "$species"){
+        #print "yes\n";
+        foreach my $gene (@genes){
+          $focal_to_orthofinder_store{$gene}=$orthogroup_name;
+        }
+      }
+      #else for the rest of the species we find the gene go hash entries for each gene:
+      else{
+        #print "No: $FOCAL eq $species\n";
+        foreach my $gene (@genes){
+          if ($Nested_species_go_store{$species}{$gene}){
+            if ($target_orthoid_to_GOterms{$orthogroup_name}{$species}){
+              my $old=$target_orthoid_to_GOterms{$orthogroup_name}{$species};
+              $target_orthoid_to_GOterms{$orthogroup_name}{$species}="$old\t$Nested_species_go_store{$species}{$gene}";
+            }
+            else{
+              $target_orthoid_to_GOterms{$orthogroup_name}{$species}=$Nested_species_go_store{$species}{$gene};
+            }
+          }
+        }
+      }
+    }
+    $current_col++;
+  }
 }
 
 
@@ -147,31 +149,35 @@ my %done; #This is to make sure we dont get duplicates in the result;
 
 foreach my $focal_genes ( keys %focal_to_orthofinder_store ){
 
-	my $OG=$focal_to_orthofinder_store{$focal_genes};
-	
-	#print "$OG\t$focal_genes\t$focal_to_orthofinder_store{$focal_genes}\n";
+  my $OG=$focal_to_orthofinder_store{$focal_genes};
+  
+  #print "$OG\t$focal_genes\t$focal_to_orthofinder_store{$focal_genes}\n";
 
-	
-	foreach my $species ( keys %{ $target_orthoid_to_GOterms{$OG} } ){
-		#print "here something $species\n";
-		my $goterms=$target_orthoid_to_GOterms{$OG}{$species};
-		print $outhandle "$focal_genes\t$OG\t$species\t$goterms\n";
-		my @goterms_sep=split("\t", $goterms);
-		foreach my $terms (@goterms_sep){
-			my $combtest="$focal_genes\t$terms";
-			if ($done{$combtest}){
-				#do nothing, already in final doc.
-			}
-			else{
-				if($focal_genes =~ /^\d/){
-					$focal_genes="GENE_$focal_genes";
-				}
-				print $outhandle2 "$focal_genes\t$terms\n";
-				$done{$combtest}="DONE";
-			}
-		}
-	}
+  
+  foreach my $species ( keys %{ $target_orthoid_to_GOterms{$OG} } ){
+    #print "here something $species\n";
+    my $goterms=$target_orthoid_to_GOterms{$OG}{$species};
+    print $outhandle "$focal_genes\t$OG\t$species\t$goterms\n";
+    my @goterms_sep=split("\t", $goterms);
+    foreach my $terms (@goterms_sep){
+      my $combtest="$focal_genes\t$terms";
+      if ($done{$combtest}){
+        #do nothing, already in final doc.
+      }
+      else{
+        if($focal_genes =~ /^\d/){
+          $focal_genes="GENE_$focal_genes";
+        }
+        print $outhandle2 "$focal_genes\t$terms\n";
+        print $outhandle3 "$OG\t$terms\n";
+        $done{$combtest}="DONE";
+      }
+    }
+  }
 }
 
-
+close $filein;
+close $outhandle;
+close $outhandle2;
+close $outhandle3;
 print "Finished\n";

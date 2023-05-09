@@ -28,6 +28,7 @@ params.chromo_go= false
 params.orthofinder= false
 params.go_assign= false
 params.go_expansion= false
+params.cafe_go= false
 
 //For CPU and Memory of each process: see conf/docker.config
 
@@ -54,6 +55,7 @@ include { DOWNLOAD_NCBI } from './modules/download_ncbi.nf'
 include { GFFREAD } from './modules/gffread.nf'
 include { CAFE } from './modules/cafe.nf'
 include { CHROMO_GO } from './modules/chromo_go.nf'
+include { CAFE_GO } from './modules/cafe_go.nf'
 
 channel.fromPath(params.focal).set{ input_target_proteins_1 }
 channel.fromPath(params.focal).set{ input_target_proteins_2 }
@@ -79,7 +81,7 @@ workflow {
 	merge_ch = GFFREAD.out.longest.collect()
 
 
-	if (params.go_assign){
+	if (params.go_assign || params.cafe_go ){
 		if (params.download){
 			background_species = channel
 				.fromPath(params.ensembl_dataset) 
@@ -129,6 +131,9 @@ workflow {
 
 			CAFE ( ORTHOFINDER_2.out.no_ortho  , ORTHOFINDER_2.out.speciestree )	
 
+			if (params.cafe_go){
+				CAFE_GO ( CAFE.out.result , CAFE.out.N0_table , GO_ASSIGN.out.go_og.first() )
+			}	
 		}
 
 	}
@@ -138,7 +143,10 @@ workflow {
 
 			ORTHOFINDER_2 ( merge_ch )
 			CAFE ( ORTHOFINDER_2.out.no_ortho  , ORTHOFINDER_2.out.speciestree )	
-
+			
+			if (params.cafe_go){
+                                CAFE_GO ( CAFE.out.result , CAFE.out.N0_table , GO_ASSIGN.out.go_og.first() )
+                        }
 		}
 	}
 
