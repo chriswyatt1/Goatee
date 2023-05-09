@@ -1,7 +1,6 @@
 process ORTHOFINDER {
     label 'orthofinder'
-    publishDir "$params.outdir/Orthofinder/"
-    stageInMode 'copy'
+    publishDir "$params.outdir/Orthofinder/", mode: "copy"
     container = 'davidemms/orthofinder:2.5.4'
     
     input:

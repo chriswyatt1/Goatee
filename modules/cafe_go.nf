@@ -1,7 +1,7 @@
 process CAFE_GO {
     label 'cafe_go'
     tag "cafe_go"
-    publishDir "$params.outdir/Cafe_go/"
+    publishDir "$params.outdir/Cafe_go/", mode: "copy"
     errorStrategy = 'ignore'    
     container= 'chriswyatt/chopgo'
 
