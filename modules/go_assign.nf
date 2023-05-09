@@ -1,7 +1,7 @@
 process GO_ASSIGN {
     label 'go_assignment'
     tag "GO_assign_${Focal}"
-    publishDir "$params.outdir/Go/"
+    publishDir "$params.outdir/Go/", mode: "copy"
     stageInMode 'copy'
     errorStrategy = 'ignore'    
     container = 'chriswyatt/chopgo'
