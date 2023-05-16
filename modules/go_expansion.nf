@@ -2,7 +2,6 @@ process GO_EXPANSION {
     label 'go_expansion'
     tag "GO_expansion"
     publishDir "$params.outdir/Go_expansion/", mode: "copy"
-    stageInMode 'copy'
     errorStrategy = 'ignore'    
     container = 'chriswyatt/chopgo'
 
