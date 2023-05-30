@@ -25,9 +25,13 @@ my %iso2gene;
 while (my $line2=<$inhandle>){
     chomp $line2;
     my @split=split("\t", $line2);
-    $longest{$split[1]}="longest";
-    $iso2gene{$split[1]}=$split[0];
-    print "$split[1] equals $split[0]\n";
+    my $gene=$split[0];
+    my $trans=$split[1];
+    $trans=~ s/rna-//g;
+    $trans=~ s/transcript://g;
+    $longest{$trans}="longest";
+    $iso2gene{$trans}=$gene;
+    print "Trans: $trans equals Gene: $gene\n";
 }
 
 use Bio::SeqIO;
@@ -41,14 +45,15 @@ while (my $seq = $seqio->next_seq){ ## selects one sequence at a time
    	## set variables for THIS sequence
     my $id = $seq->id;
     chomp $id;
-    #print "here $id\n";
-	my $string = $seq->seq;
+    print "here $id\n";
+    my $string = $seq->seq;
     chomp $string;
     my $new_id;
     my $len=length($string);
     #Remove NCBI rna- lines
     $id=~ s/rna-//g;
     $id=~ s/transcript://g;
+    print "what $id\n";
     if ($longest{$id}){
         print $outhandle ">$iso2gene{$id}\n$string\n";
     }
