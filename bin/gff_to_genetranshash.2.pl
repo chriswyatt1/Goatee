@@ -60,6 +60,18 @@ while (my $line=<$filein>){
                 $gene=$temp_h{"Parent"};
                 $tran=$temp_h{"ID"};
             }
+            elsif($split[1] eq "Genbank"){
+                #Its probably a Genbank gff with ID and Parent for gene and transcript isoform names:
+                my @lsplit=split("\;", $split[8]);
+                my %temp_h;
+                foreach my $bits (@lsplit){
+                    my @spbit=split("\=", $bits);
+                    $temp_h{$spbit[0]}=$spbit[1];
+                }
+                my $curr_tran=$temp_h{"ID"};
+                $gene=$temp_h{"Parent"};
+                $tran=$temp_h{"ID"};
+            }
             else{
                 #Its probably a normal NCBI type:
                 my @lsplit=split("\;", $split[8]);
@@ -110,3 +122,4 @@ foreach my $gen (keys %longest){
     my @spgen=split("\t", $longest{$gen});
     print $fileout3 "$gen\t$spgen[0]\n";
 }
+
