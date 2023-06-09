@@ -16,6 +16,7 @@ process GFFREAD {
         path( "${sample_id}.splicedexons.fa" )
         path( "${sample_id}.gff_for_jvci.gff3" ), emit: gffs
 	path( "${sample_id}_gene_alltran_list.txt" ), emit: gene_to_isoforms
+	path( "${sample_id}.splicedcds.fa.nucl.longest.fa" )
 
     script:
     """
@@ -62,7 +63,7 @@ fi
 
 	gff_to_genetranshash.2.pl
 	prot_fasta_to_longest.pl ${sample_id}.prot.fa ${sample_id}_longestisoform.txt
-	     
+	fasta_topIsoform.pl ${sample_id}.splicedcds.fa ${sample_id}_longestisoform.txt	     
     """
 }
 
