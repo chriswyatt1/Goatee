@@ -14,10 +14,10 @@
  */
 
 params.input= "data/Example.csv"
+params.input_protein= false
 params.ensembl_repo="metazoa_mart"
 params.ensembl_host='https://metazoa.ensembl.org'
 params.ensembl_dataset="example.txt"
-params.focal = "Branchiostoma_lanceolatum.BraLan2.pep.all.fa"
 params.predownloaded_fasta= "./Background_species_folder/*"
 params.predownloaded_gofiles= "./Background_gofiles_folder/*"
 params.outdir = "results"
@@ -57,8 +57,6 @@ include { CAFE } from './modules/cafe.nf'
 include { CHROMO_GO } from './modules/chromo_go.nf'
 include { CAFE_GO } from './modules/cafe_go.nf'
 
-channel.fromPath(params.focal).set{ input_target_proteins_1 }
-channel.fromPath(params.focal).set{ input_target_proteins_2 }
 
 
 Channel
@@ -70,6 +68,11 @@ Channel
     }
     .set { input_type }
 
+Channel
+    .fromPath(params.input_proteins)
+    .splitCsv()
+    .set { input_type_proteins }
+
 
 
 workflow {
@@ -78,7 +81,7 @@ workflow {
 
 	GFFREAD ( DOWNLOAD_NCBI.out.genome.mix(input_type.local) )
 
-	merge_ch = GFFREAD.out.longest.collect()
+	merge_ch = GFFREAD.out.longest.collect().mix(input_type_proteins).collect()
 
 
 	if (params.go_assign || params.cafe_go ){
