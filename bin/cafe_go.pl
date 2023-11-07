@@ -18,8 +18,12 @@ chomp $file;
 open(my $filein, "<", $file)   or die "Could not open $file\n";
 my $header=<$filein>;
 my @head_N0=split("\t", $header);
+
+#print "header : $header\n";
+
 my %HOG_TO_OG;
 my %GENE_DATA;
+my %GENE_DATA_OG;
 my %OG_DATA;
 
 #Create a background OG list for each species, for GO. See in next section.
@@ -33,8 +37,20 @@ while (my $line = <$filein>){
     $HOG_TO_OG{$hog}=$og;
     my $n=0;
     foreach my $col (@splitl){
+
         #Save -> Species, HOG, and genes
+        #This will print any gene that is associated with each OG, which may be in a HOG not changing. 
         $GENE_DATA{$head_N0[$n]}{$hog}=$col;
+
+        if ($GENE_DATA_OG{$head_N0[$n]}{$og}){
+            my $old_h=$GENE_DATA_OG{$head_N0[$n]}{$og};
+            $GENE_DATA_OG{$head_N0[$n]}{$og}="$old_h\, $col";
+            #print "IOt happens  $head_N0[$n]   $og   $old_h  GENEs  $col \n";
+        }
+        else{
+            $GENE_DATA_OG{$head_N0[$n]}{$og}=$col;
+        }
+
         $OG_DATA{$head_N0[$n]}{$hog}=$og;
 
         #Create a background for each species, to show which OGs are present in each species, and hence were tested in each species (Background for GO).
@@ -155,6 +171,14 @@ my %SPECIES_C_OGS;
 
 #Run through the COUNT DATA and count 
 foreach my $species3 (keys %COUNT_DATA){
+
+    #set up output gene list files 
+    my $outnagenes3="$species3\.neg.genes.txt";
+    open(my $outgene3, ">", $outnagenes3)   or die "Could not open $outnagenes3\n";
+    my $outnagenes4="$species3\.pos.genes.txt";
+    open(my $outgene4, ">", $outnagenes4)   or die "Could not open $outnagenes4\n";
+
+
     foreach my $hog (keys %{$COUNT_DATA{$species3}}){
         if ($COUNT_DATA{$species3}{$hog} eq "\+0"){
             #Do nothing
@@ -169,14 +193,27 @@ foreach my $species3 (keys %COUNT_DATA){
             if ($SPECIES_C_OGS{$species3}{'pos'}){
                 my $old=$SPECIES_C_OGS{$species3}{'pos'};
                 $SPECIES_C_OGS{$species3}{'pos'}="$old\n$og";
+
+                #print "genes: $genes_related_to_OG $species3 $og\n";
+                my $genes_related_to_OG=$GENE_DATA_OG{$species3}{$og};
+                if ($genes_related_to_OG){
+                    print $outgene4 "$og\t$genes_related_to_OG\n";
+                }
             }
             else{
                 $SPECIES_C_OGS{$species3}{'pos'}="$og";
+
+                #print "genes: $genes_related_to_OG $species3 $og\n";
+                my $genes_related_to_OG=$GENE_DATA_OG{$species3}{$og};
+                if ($genes_related_to_OG){
+                    print $outgene4 "$og\t$genes_related_to_OG\n";
+                }
             }
             
         }
-        else{
-            #print "OORR $species3 $hog $COUNT_DATA{$species3}{$hog}\n";
+        elsif($COUNT_DATA{$species3}{$hog} =~ m/\-/g){
+        
+            print "OORR $species3 $hog $COUNT_DATA{$species3}{$hog}  $HOG_TO_OG{$hog}\n";
             $SPECIES_CONTRACTION_C{$species3}++;
             $SPECIES_TOTAL_C{$species3}++;
             my $og=$HOG_TO_OG{$hog};
@@ -184,10 +221,27 @@ foreach my $species3 (keys %COUNT_DATA){
             if ($SPECIES_C_OGS{$species3}{'neg'}){
                 my $old=$SPECIES_C_OGS{$species3}{'neg'};
                 $SPECIES_C_OGS{$species3}{'neg'}="$old\n$og";
+                my $genes_related_to_OG=$GENE_DATA_OG{$species3}{$og};
+
+                #print "genes: $genes_related_to_OG $species3 $og\n";
+                if ($genes_related_to_OG){
+                    print $outgene3 "$og\t$genes_related_to_OG\n";
+                }
+                
             }
             else{
                 $SPECIES_C_OGS{$species3}{'neg'}="$og";
+
+                #print "genes: $genes_related_to_OG $species3 $og\n";
+                my $genes_related_to_OG=$GENE_DATA_OG{$species3}{$og};
+                if ($genes_related_to_OG){
+                    print $outgene3 "$og\t$genes_related_to_OG\n";
+                }
             }
+        }
+        else{
+            #doesnt fit what we expect.
+            print "Should not happen, contact maintainer\n";
         }
     }
 }
@@ -295,8 +349,6 @@ foreach my $species5 (keys %SPECIES_TOTAL){
 close $out1;
 
 print "\nFinished Running\n\n";
-
-
 
 
 
