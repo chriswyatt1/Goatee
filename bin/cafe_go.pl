@@ -17,6 +17,7 @@ my $file=`ls N0.ex.tsv`;
 chomp $file;
 open(my $filein, "<", $file)   or die "Could not open $file\n";
 my $header=<$filein>;
+chomp $header;
 my @head_N0=split("\t", $header);
 
 #print "header : $header\n";
@@ -25,6 +26,8 @@ my %HOG_TO_OG;
 my %GENE_DATA;
 my %GENE_DATA_OG;
 my %OG_DATA;
+#Make a hash for the whole line per HOG
+my %HOG_to_line;
 
 #Create a background OG list for each species, for GO. See in next section.
 my %Background_OGs;
@@ -36,6 +39,8 @@ while (my $line = <$filein>){
     my $og=$splitl[1];
     $HOG_TO_OG{$hog}=$og;
     my $n=0;
+    #add hog to line:
+    $HOG_to_line{$hog}=$line;
     foreach my $col (@splitl){
 
         #Save -> Species, HOG, and genes
@@ -81,6 +86,8 @@ open(my $filein2, "<", $file2)   or die "Could not open $file2\n";
 open(my $filein3, "<", $file3)   or die "Could not open $file3\n";
 my $header2=<$filein2>;
 my $header3=<$filein3>;
+chomp $header2;
+chomp $header3;
 
 my @head_pval=split("\t", $header2);
 my @head_pval_simp;
@@ -132,10 +139,21 @@ my %SPECIES_EXPANSION_SUM;
 my %SPECIES_CONTRACTION_SUM;
 
 foreach my $species (keys %PVALUE_DATA){
-    #print "$species\n";
+
+
+    #set up output gene list files 
+    my $outnagenes5="$species\.sig.neg.genes.txt";
+    open(my $outgene5, ">", $outnagenes5)   or die "Could not open $outnagenes5\n";
+    my $outnagenes6="$species\.sig.pos.genes.txt";
+    open(my $outgene6, ">", $outnagenes6)   or die "Could not open $outnagenes6\n";
+
+    print $outgene6 "$header\n";
+    print $outgene5 "$header\n";
+
+    #print "SP $species\n";
     foreach my $hog (keys %{$PVALUE_DATA{$species}}){
         my $pval=$PVALUE_DATA{$species}{$hog};
-        #print "$hog\n";
+        #print "HOGGY $hog\n";
         if (looks_like_number($pval) ){
             if($pval <= 0.05){
                 my $direction=$COUNT_DATA{$species}{$hog};
@@ -148,10 +166,16 @@ foreach my $species (keys %PVALUE_DATA){
                 elsif ($direction =~ m/\+/g){
                     $SPECIES_EXPANSION{$species}++;
                     $SPECIES_EXPANSION_SUM{$species}+=$direction;
+
+                    #print the hog lines of expansions
+                    print $outgene6 "$HOG_to_line{$hog}\n";
                 }
                 elsif($direction =~ m/\-/g){
                     $SPECIES_CONTRACTION{$species}++;
                     $SPECIES_CONTRACTION_SUM{$species}+=$direction;
+
+                    #print the hog lines of contractions
+                    print $outgene5 "$HOG_to_line{$hog}\n";
                 }
                 else{
                     print "WEIRD<<<< What is this $direction\n";
@@ -171,6 +195,7 @@ my %SPECIES_C_OGS;
 
 #Run through the COUNT DATA and count 
 foreach my $species3 (keys %COUNT_DATA){
+    #print "HEEER: $species3\n";
 
     #set up output gene list files 
     my $outnagenes3="$species3\.neg.genes.txt";
@@ -189,7 +214,7 @@ foreach my $species3 (keys %COUNT_DATA){
             $SPECIES_EXPANSION_C{$species3}++;
             $SPECIES_TOTAL_C{$species3}++;
             my $og=$HOG_TO_OG{$hog};
-            #print "$species3 $hog\n";
+            
             if ($SPECIES_C_OGS{$species3}{'pos'}){
                 my $old=$SPECIES_C_OGS{$species3}{'pos'};
                 $SPECIES_C_OGS{$species3}{'pos'}="$old\n$og";
@@ -198,6 +223,9 @@ foreach my $species3 (keys %COUNT_DATA){
                 my $genes_related_to_OG=$GENE_DATA_OG{$species3}{$og};
                 if ($genes_related_to_OG){
                     print $outgene4 "$og\t$genes_related_to_OG\n";
+                }
+                else{
+                    print $outgene4 "$og\tNo_genes\n";
                 }
             }
             else{
@@ -208,16 +236,22 @@ foreach my $species3 (keys %COUNT_DATA){
                 if ($genes_related_to_OG){
                     print $outgene4 "$og\t$genes_related_to_OG\n";
                 }
+                else{
+                    print $outgene4 "$og\tNo_genes\n";
+                }
             }
             
         }
         elsif($COUNT_DATA{$species3}{$hog} =~ m/\-/g){
         
-            print "OORR $species3 $hog $COUNT_DATA{$species3}{$hog}  $HOG_TO_OG{$hog}\n";
+            # Just a print line to check things are working.->   print "OORR $species3 $hog $COUNT_DATA{$species3}{$hog}  $HOG_TO_OG{$hog}\n";
             $SPECIES_CONTRACTION_C{$species3}++;
             $SPECIES_TOTAL_C{$species3}++;
             my $og=$HOG_TO_OG{$hog};
-            #print "$species3 $hog\n";
+
+
+
+            
             if ($SPECIES_C_OGS{$species3}{'neg'}){
                 my $old=$SPECIES_C_OGS{$species3}{'neg'};
                 $SPECIES_C_OGS{$species3}{'neg'}="$old\n$og";
@@ -226,6 +260,9 @@ foreach my $species3 (keys %COUNT_DATA){
                 #print "genes: $genes_related_to_OG $species3 $og\n";
                 if ($genes_related_to_OG){
                     print $outgene3 "$og\t$genes_related_to_OG\n";
+                }
+                else{
+                    print $outgene3 "$og\tNo_genes\n";
                 }
                 
             }
@@ -237,11 +274,14 @@ foreach my $species3 (keys %COUNT_DATA){
                 if ($genes_related_to_OG){
                     print $outgene3 "$og\t$genes_related_to_OG\n";
                 }
+                else{
+                    print $outgene3 "$og\tNo_genes\n";
+                }
             }
         }
         else{
-            #doesnt fit what we expect.
-            print "Should not happen, contact maintainer\n";
+            #doesnt fit what we expect. This can be because the #FamiyID is on the first column,,,, we have to just ignore this error, it is expected. 
+            #print "Should not happen, contact maintainer\n$hog  equals $species3 $hog $COUNT_DATA{$species3}{$hog}\n";
         }
     }
 }
