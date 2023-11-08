@@ -1,8 +1,10 @@
-This is a Nextflow pipeline to run non-model organism Gene Ontology
+This is a Nextflow pipeline to run non-model organism Gene Ontology and CAFE 
 
 When working with Human and Mouse, there are plentiful resources to take advantage of. Yet, for non-model organisms, it can take a long time to build the resources needed to analyse a new species. 
 
 This pipeline aims to create a simple procedure to build a Gene ontology database for a new species. Then you can use it to produce GO enrichment hits with a few different programs to compare and contrast them.
+
+It also optionally runs CAFE, so you can explore gene expansions and contractions
 
 
 1. Running on mammalian data (default settings):
