@@ -24,7 +24,7 @@ include { CAFE } from './modules/cafe.nf'
  
 workflow {
  
-	DOWNLOAD_NCBI ( input_type.ncbi )
+	DOWNLOAD_NCBI ( params.input )
  
 	GFFREAD ( DOWNLOAD_NCBI.out.genome )
  
