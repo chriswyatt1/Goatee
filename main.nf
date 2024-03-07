@@ -14,7 +14,6 @@
  */
 
 params.input= "data/Example.csv"
-params.input_protein= false
 params.ensembl_repo="metazoa_mart"
 params.ensembl_host='https://metazoa.ensembl.org'
 params.ensembl_dataset="example.txt"
@@ -67,21 +66,13 @@ Channel
     }
     .set { input_type }
 
-Channel
-    .fromPath(params.input_proteins)
-    .splitCsv()
-    .set { input_type_proteins }
-
-
-
 workflow {
 
 	DOWNLOAD_NCBI ( input_type.ncbi )
 
 	GFFREAD ( DOWNLOAD_NCBI.out.genome.mix(input_type.local) )
 
-	merge_ch = GFFREAD.out.longest.collect().mix(input_type_proteins).collect()
-
+	merge_ch = GFFREAD.out.longest.collect()
 
 	if (params.go_assign || params.cafe_go ){
 		if (params.download){
@@ -157,3 +148,4 @@ workflow {
 workflow.onComplete {
 	println ( workflow.success ? "\nDone! Open your report in your browser --> $params.outdir/report.html (if you added -with-report flag)\n" : "Hmmm .. something went wrong" )
 }
+
